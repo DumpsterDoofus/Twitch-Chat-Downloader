@@ -1,6 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
-using ApiIntegrations;
+using ApiIntegrations.Models.Twitch;
 
 namespace ConsoleDownloader
 {
@@ -8,10 +7,9 @@ namespace ConsoleDownloader
     {
         static void Main(string[] args)
         {
-            //var r = ReChatDownloader.ReChatDownloader.GenerateSubtitles(91001230);
-            var c = new ApiIntegrations.Clients.CatApiClient();
-            c.HealthCheck();
-            var cars = c.GetCats(1);
+            var c = new ReChatDownloader.ReChatDownloader();
+            //c.StoreAllVideosWithChat(new Channel {name = "zfg1"});
+            var v = c.GenerateSubtitlesForAllStoredVideos();
             Console.ReadLine();
 
         }

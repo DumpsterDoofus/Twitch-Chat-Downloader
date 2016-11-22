@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ApiIntegrations, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ApiIntegrations.1.1.3\lib\ApiIntegrations.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -56,12 +60,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="RavenDatabaseClient.cs" />
-    <Compile Include="ReChatClient.cs" />
     <Compile Include="ReChatDownloader.cs" />
-    <Compile Include="ReChatResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Video.cs" />
-    <Compile Include="VideoTimespan.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

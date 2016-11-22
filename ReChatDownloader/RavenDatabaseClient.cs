@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ApiIntegrations.Models.Twitch;
 using Raven.Client.Document;
 
 namespace ReChatDownloader
@@ -22,55 +20,23 @@ namespace ReChatDownloader
             _documentStore.Initialize();
         }
 
-        public void StoreVideo(Video video)
+        public void StoreVideo(VideoWithChat video)
         {
             using (var session = _documentStore.OpenSession())
             {
-                session.Store(video);
+                session.Store(video, video.Video._id);
                 session.SaveChanges();
             }
         }
 
-        public void StoreTimespan(VideoTimespan timespan)
-        {
-            using (var session = _documentStore.OpenSession())
-            {
-                session.Store(timespan);
-                session.SaveChanges();
-            }
-
-        }
-
-        public List<Video> GetVideos()
+        public List<T> Get<T>()
         {
             using (var session = _documentStore.OpenSession())
             {
                 var video =
-                    session.Query<Video>().ToList();
+                    session.Query<T>().ToList();
                 return video;
             }
         }
-
-        public Video GetVideo(int videoId)
-        {
-            using (var session = _documentStore.OpenSession())
-            {
-                var video =
-                    session.Load<Video>(videoId);
-                return video;
-            }
-        }
-
-        public VideoTimespan GetTimespan(int id)
-        {
-            using (var session = _documentStore.OpenSession())
-            {
-                var video =
-                    session.Load<VideoTimespan>(id);
-                return video;
-            }
-        }
-
     }
-
 }

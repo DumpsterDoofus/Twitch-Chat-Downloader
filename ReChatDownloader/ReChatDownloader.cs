@@ -2,40 +2,39 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using ApiIntegrations.Clients;
+using ApiIntegrations.Models.Twitch;
 using Raven.Abstractions.Data;
 
 namespace ReChatDownloader
 {
-    public static class ReChatDownloader
+    public class ReChatDownloader
     {
-        private static readonly RavenDatabaseClient RavenDatabaseClient = new RavenDatabaseClient();
+        private readonly RavenDatabaseClient RavenDatabaseClient;
+        private readonly TwitchClient TwitchClient;
 
-        public static bool TryDownloadVideoChatToRaven(int videoId)
+        public ReChatDownloader()
         {
-            var v = RavenDatabaseClient.GetVideo(videoId);
-            if (v != null)
+            RavenDatabaseClient = new RavenDatabaseClient();
+            TwitchClient = new TwitchClient();
+        }
+
+        public void StoreAllVideosWithChat(Channel channel, VideoType videoType = VideoType.PastBroadcast)
+        {
+            var videos = TwitchClient.GetVideosAll(channel, videoType);
+            foreach (var video in videos)
             {
-                return true;
-            }
-            try
-            {
-                v = new Video(videoId);
-                RavenDatabaseClient.StoreVideo(v);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
+                RavenDatabaseClient.StoreVideo(TwitchClient.GetReChatAll(video));
             }
         }
 
-        public static bool GenerateSubtitlesForAllVideos()
+        public bool GenerateSubtitlesForAllStoredVideos()
         {
-            var videos = RavenDatabaseClient.GetVideos();
+            var videos = RavenDatabaseClient.Get<VideoWithChat>();
             return videos.Select(GenerateSubtitles).Any(b => !b);
         }
 
-        public static bool GenerateSubtitles(Video video)
+        public bool GenerateSubtitles(VideoWithChat video)
         {
             var s = new StringBuilder();
             var lineCount = 1;
@@ -45,7 +44,7 @@ namespace ReChatDownloader
                 {
                     s.AppendLine(lineCount.ToString());
                     var t = datum.attributes.timestamp;
-                    var t2 = (long)(video.Timespan.StartTime)*1000;
+                    var t2 = video.StartTimestamp * 1000;
                     var t3 = t - t2;
                     var a = new TimeSpan(0, 0, 0, 0, (int)t3);
                     var color = string.IsNullOrWhiteSpace(datum.attributes.color) ? "#FFFFFF" : datum.attributes.color;
@@ -55,14 +54,16 @@ namespace ReChatDownloader
                     lineCount++;
                 }
             }
-            File.AppendAllText($"{video.Id}.srt", s.ToString());
+            var filename = GetSafeFilename($"{video.Video.title}-{video.Video._id}.srt");
+            File.AppendAllText(filename, s.ToString());
             return true;
         }
 
-        public static bool GenerateSubtitles(int videoId)
+        public string GetSafeFilename(string filename)
         {
-            var v = RavenDatabaseClient.GetVideo(videoId);
-            return v != null && GenerateSubtitles(v);
+
+            return string.Join("_", filename.Split(Path.GetInvalidFileNameChars()));
+
         }
     }
 }
