@@ -1,5 +1,4 @@
 ﻿using System;
-using ApiIntegrations.Clients;
 
 namespace TwitchChatDownloader
 {
@@ -7,8 +6,6 @@ namespace TwitchChatDownloader
     {
         private static void Main(string[] args)
         {
-            var c = new TwitchClient();
-            c.GetVideos("v69027652");
             var arguments = new Arguments(args);
             InputType inputType;
             OutputType outputType;
