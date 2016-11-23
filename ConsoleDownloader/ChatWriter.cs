@@ -47,7 +47,7 @@ namespace TwitchChatDownloader
             }
 
             var filename = GetSafeFilename($"{videoChatHistory.Video.title}-{videoChatHistory.Video._id}.srt");
-            File.AppendAllText(filename, s.ToString());
+            File.WriteAllText(filename, s.ToString());
         }
 
         private static string GetSafeFilename(string filename)

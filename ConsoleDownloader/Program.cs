@@ -25,8 +25,8 @@ Examples:
             var arguments = new Arguments(args);
             InputType inputType;
             OutputType outputType;
-            var bInputType = Enum.TryParse(arguments["inputtype"], true, out inputType);
-            var bOutputType = Enum.TryParse(arguments["outputtype"], true, out outputType);
+            var bInputType = Enum.TryParse(arguments["inputtype"] ?? "url", true, out inputType);
+            var bOutputType = Enum.TryParse(arguments["outputtype"] ?? "srt", true, out outputType);
             var path = arguments["path"];
             if (path != null)
             {
