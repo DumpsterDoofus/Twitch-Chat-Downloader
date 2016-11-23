@@ -1,10 +1,10 @@
 ﻿using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 
-namespace ConsoleDownloader
+namespace TwitchChatDownloader
 {
     /// <summary>
-    ///     Arguments class. Taken from http://www.codeproject.com/Articles/3111/C-NET-Command-Line-Arguments-Parser
+    ///     Arguments class. Taken with modification from http://www.codeproject.com/Articles/3111/C-NET-Command-Line-Arguments-Parser
     /// </summary>
     public class Arguments
     {
@@ -15,7 +15,7 @@ namespace ConsoleDownloader
         public Arguments(string[] args)
         {
             _parameters = new StringDictionary();
-            var spliter = new Regex(@"^-{1,2}|^/|=|:",
+            var spliter = new Regex(@"^-{1,2}",
                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
             var remover = new Regex(@"^['""]?(.*?)['""]?$",

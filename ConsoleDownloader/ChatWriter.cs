@@ -4,7 +4,7 @@ using System.Text;
 using ApiIntegrations.Models.Twitch;
 using Newtonsoft.Json;
 
-namespace ConsoleDownloader
+namespace TwitchChatDownloader
 {
     class ChatWriter
     {
@@ -55,7 +55,7 @@ namespace ConsoleDownloader
             return string.Join("_", filename.Split(Path.GetInvalidFileNameChars()));
         }
 
-        private void WriteToJson(VideoChatHistory videoChatHistory)
+        private static void WriteToJson(VideoChatHistory videoChatHistory)
         {
             var json = JsonConvert.SerializeObject(videoChatHistory);
             var filename = GetSafeFilename($"{videoChatHistory.Video.title}-{videoChatHistory.Video._id}.json");

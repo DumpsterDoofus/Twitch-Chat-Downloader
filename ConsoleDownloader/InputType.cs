@@ -1,4 +1,4 @@
-﻿namespace ConsoleDownloader
+﻿namespace TwitchChatDownloader
 {
     enum InputType
     {

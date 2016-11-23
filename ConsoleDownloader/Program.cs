@@ -1,11 +1,14 @@
 ﻿using System;
+using ApiIntegrations.Clients;
 
-namespace ConsoleDownloader
+namespace TwitchChatDownloader
 {
-    class Program
+    internal static class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
+            var c = new TwitchClient();
+            c.GetVideos("v69027652");
             var arguments = new Arguments(args);
             InputType inputType;
             OutputType outputType;
@@ -33,16 +36,30 @@ namespace ConsoleDownloader
             }
             else
             {
-                Console.WriteLine("Help info");
+                Console.WriteLine(@"Usage is TwitchChatDownloader.exe [flags]
+
+Flags:
+-path (required): Either a URL of a Twitch video or the physical path of a previously-downloaded JSON file.
+-inputtype: Either ""file"" or ""url"". Defaults to ""url"".
+-outputtype: Either ""srt"" or ""json"". Defaults to ""srt"".
+
+Examples:
+
+1. TwitchChatDownloader -path https://www.twitch.tv/zfg1/v/69027652 -inputtype url -outputtype srt
+2. TwitchChatDownloader -path https://www.twitch.tv/zfg1/v/69027652 
+(same as example 1)
+3. TwitchChatDownloader -path https://www.twitch.tv/zfg1/v/69027652 -inputtype url -outputtype json
+4. TwitchChatDownloader -path ""C:\JsonFromExample3.json"" -inputtype file -outputtype srt
+");
             }
         }
 
-        static void Process(string path, InputType inputType, OutputType outputType)
+        private static void Process(string path, InputType inputType, OutputType outputType)
         {
             var chatReader = new ChatReader(inputType);
             var chatWriter = new ChatWriter(outputType);
-            var chatMessages = chatReader.GetChatMessages(path);
-            chatWriter.WriteMessages(chatMessages);
+            var chatHistory = chatReader.GetChatHistory(path);
+            chatWriter.WriteChatHistory(chatHistory);
         }
     }
 }
