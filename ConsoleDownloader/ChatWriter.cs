@@ -59,6 +59,7 @@ namespace TwitchChatDownloader
         {
             var json = JsonConvert.SerializeObject(videoChatHistory);
             var filename = GetSafeFilename($"{videoChatHistory.Video.title}-{videoChatHistory.Video._id}.json");
+            File.WriteAllText(filename, json);
         }
     }
 }
