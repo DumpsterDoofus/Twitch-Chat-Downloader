@@ -17,7 +17,7 @@ Examples:
 2. TwitchChatDownloader -path https://www.twitch.tv/zfg1/v/69027652 
 (same as example 1)
 3. TwitchChatDownloader -path https://www.twitch.tv/zfg1/v/69027652 -inputtype url -outputtype json
-4. TwitchChatDownloader -path ""C:\JsonFromExample3.json"" -inputtype file -outputtype srt
+4. TwitchChatDownloader -path ""JsonFromExample3.json"" -inputtype file -outputtype srt
 ";
 
         private static void Main(string[] args)
