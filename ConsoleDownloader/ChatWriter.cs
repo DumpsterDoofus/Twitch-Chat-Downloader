@@ -34,11 +34,11 @@ namespace TwitchChatDownloader
         {
             var s = new StringBuilder();
             var lineCount = 1;
-            var startTimeMilliseconds = videoChatHistory.ChatTimespan.StartTime*1000;
+            var startTimeMilliseconds = videoChatHistory.ChatTimespan.StartTimestampUnixSeconds*1000;
             foreach (var chatMessage in videoChatHistory.ChatMessages)
             {
                 s.AppendLine(lineCount.ToString());
-                var millisecondsIntoVideo = chatMessage.attributes.timestamp - startTimeMilliseconds;
+                var millisecondsIntoVideo = chatMessage.attributes.TimestampUnixMilliseconds - startTimeMilliseconds;
                 var a = new TimeSpan(0, 0, 0, 0, (int)millisecondsIntoVideo);
                 var color = chatMessage.attributes.color ?? "#FFFFFF";
                 s.AppendLine(a.ToString("hh\\:mm\\:ss\\,fff") + " --> " + a.Add(new TimeSpan(0, 0, 0, 5)).ToString("hh\\:mm\\:ss\\,fff"));
