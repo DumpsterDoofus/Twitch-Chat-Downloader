@@ -45,21 +45,27 @@ namespace TwitchChatDownloader
                 s.AppendLine($"<font color=\"{color}\">{chatMessage.attributes.tags.displayname}</font>: {chatMessage.attributes.message}\n");
                 lineCount++;
             }
-
             var filename = GetSafeFilename($"{videoChatHistory.Video.title}-{videoChatHistory.Video._id}.srt");
-            File.WriteAllText(filename, s.ToString());
-        }
-
-        private static string GetSafeFilename(string filename)
-        {
-            return string.Join("_", filename.Split(Path.GetInvalidFileNameChars()));
+            WriteToRelativePath($"./SRT Files/{filename}", s.ToString());
         }
 
         private static void WriteToJson(VideoChatHistory videoChatHistory)
         {
             var json = JsonConvert.SerializeObject(videoChatHistory);
             var filename = GetSafeFilename($"{videoChatHistory.Video.title}-{videoChatHistory.Video._id}.json");
-            File.WriteAllText(filename, json);
+            WriteToRelativePath($"./JSON Files/{filename}", json);
+        }
+
+        private static void WriteToRelativePath(string filePath, string content)
+        {
+            var file = new FileInfo(filePath);
+            file.Directory?.Create();
+            File.WriteAllText(file.FullName, content);
+        }
+
+        private static string GetSafeFilename(string filename)
+        {
+            return string.Join("_", filename.Split(Path.GetInvalidFileNameChars()));
         }
     }
 }

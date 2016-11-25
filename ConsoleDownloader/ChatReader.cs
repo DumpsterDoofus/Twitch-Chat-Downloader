@@ -10,6 +10,7 @@ namespace TwitchChatDownloader
     class ChatReader
     {
         private readonly InputType _inputType;
+
         public ChatReader(InputType inputType)
         {
             _inputType = inputType;
@@ -19,14 +20,32 @@ namespace TwitchChatDownloader
         {
             switch (_inputType)
             {
-                    case InputType.Url:
+                case InputType.URL:
                     var twitchClient = new TwitchClient();
                     var videoId = GetVideoIdFromUrl(path);
                     return twitchClient.GetReChatAll(videoId);
-                case InputType.File:
-                    var json = File.ReadAllText(path);
-                    var chatMessages = JsonConvert.DeserializeObject<VideoChatHistory>(json);
-                    return chatMessages;
+                case InputType.JSON:
+                    string json;
+                    try
+                    {
+                        json = File.ReadAllText(path);
+                    }
+                    catch (Exception)
+                    {
+                        Logger.Log.Error($"Unable to open file at {path}.");
+                        throw;
+                    }
+                    try
+                    {
+                        var chatMessages = JsonConvert.DeserializeObject<VideoChatHistory>(json);
+                        return chatMessages;
+
+                    }
+                    catch (Exception)
+                    {
+                        Logger.Log.Error($"Unable to understand contents of file at {path}.");
+                        throw;
+                    }
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -34,7 +53,15 @@ namespace TwitchChatDownloader
 
         private static string GetVideoIdFromUrl(string url)
         {
-            return new Regex("/v/\\d+").Match(url).Captures[0].Value.Replace("/", "");
+            try
+            {
+                return new Regex("/v/\\d+").Match(url).Captures[0].Value.Replace("/", "");
+            }
+            catch
+            {
+                Logger.Log.Error($"Error parsing video URL {url}.");
+                throw;
+            }
         }
     }
 }

@@ -8,7 +8,7 @@ namespace TwitchChatDownloader
 
 Flags:
 -path (required): Either a URL of a Twitch video or the physical path of a previously-downloaded JSON file.
--inputtype: Either ""file"" or ""url"". Defaults to ""url"".
+-inputtype: Either ""url"" or ""json"". Defaults to ""url"".
 -outputtype: Either ""srt"" or ""json"". Defaults to ""srt"".
 
 Examples:
@@ -17,7 +17,7 @@ Examples:
 2. TwitchChatDownloader -path https://www.twitch.tv/zfg1/v/69027652 
 (same as example 1)
 3. TwitchChatDownloader -path https://www.twitch.tv/zfg1/v/69027652 -inputtype url -outputtype json
-4. TwitchChatDownloader -path ""JsonFromExample3.json"" -inputtype file -outputtype srt
+4. TwitchChatDownloader -path ""JSON Files/JsonFromExample3.json"" -inputtype json -outputtype srt
 ";
 
         private static void Main(string[] args)
@@ -38,17 +38,17 @@ Examples:
                     }
                     else
                     {
-                        Console.WriteLine("Invalid outputtype.");
+                        Logger.Log.Error("Invalid outputtype.");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Invalid inputtype.");
+                    Logger.Log.Error("Invalid inputtype.");
                 }
             }
             else
             {
-                Console.WriteLine(HelpInstructions);
+                Logger.Log.Info(HelpInstructions);
             }
         }
 

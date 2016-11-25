@@ -1,6 +1,6 @@
 ﻿namespace TwitchChatDownloader
 {
-    enum OutputType
+    internal enum OutputType
     {
         SRT,
         JSON

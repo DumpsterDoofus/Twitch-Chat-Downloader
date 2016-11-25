@@ -1,8 +1,8 @@
 ﻿namespace TwitchChatDownloader
 {
-    enum InputType
+    internal enum InputType
     {
-        File,
-        Url
+        JSON,
+        URL
     }
 }
