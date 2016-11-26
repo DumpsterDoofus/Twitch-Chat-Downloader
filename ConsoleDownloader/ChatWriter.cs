@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using ApiIntegrations.Models.Twitch;
@@ -6,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace TwitchChatDownloader
 {
-    class ChatWriter
+    internal class ChatWriter
     {
         private readonly OutputType _outputType;
         private const int MinimumMillisecondsOnScreen = 5000;
@@ -16,15 +17,17 @@ namespace TwitchChatDownloader
             _outputType = outputType;
         }
 
-        public void WriteChatHistory(VideoChatHistory chatHistory)
+        public void WriteChatHistory(List<VideoChatHistory> chatHistory)
         {
             switch (_outputType)
             {
                     case OutputType.SRT:
-                    WriteToSrt(chatHistory);
+                    foreach (var videoChatHistory in chatHistory)
+                        WriteToSrt(videoChatHistory);
                     break;
                     case OutputType.JSON:
-                    WriteToJson(chatHistory);
+                    foreach (var videoChatHistory in chatHistory)
+                        WriteToJson(videoChatHistory);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

@@ -3,6 +3,9 @@
     internal enum InputType
     {
         JSON,
-        URL
+        URL,
+        PastBroadcasts,
+        Highlights,
+        JSONBatch
     }
 }
