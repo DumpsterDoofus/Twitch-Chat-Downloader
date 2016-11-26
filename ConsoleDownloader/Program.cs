@@ -34,7 +34,14 @@ Examples:
                 {
                     if (bOutputType)
                     {
-                        Process(path, inputType, outputType);
+                        try
+                        {
+                            Process(path, inputType, outputType);
+                        }
+                        catch (Exception)
+                        {
+                            // ignored, will be logged.
+                        }
                     }
                     else
                     {

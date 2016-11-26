@@ -30,9 +30,9 @@ namespace TwitchChatDownloader
                     {
                         json = File.ReadAllText(path);
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
-                        Logger.Log.Error($"Unable to open file at {path}.");
+                        Logger.Log.Error($"Unable to open file at {path}.", e);
                         throw;
                     }
                     try
@@ -41,9 +41,9 @@ namespace TwitchChatDownloader
                         return chatMessages;
 
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
-                        Logger.Log.Error($"Unable to understand contents of file at {path}.");
+                        Logger.Log.Error($"Unable to understand contents of file at {path}.", e);
                         throw;
                     }
                 default:
@@ -57,9 +57,9 @@ namespace TwitchChatDownloader
             {
                 return new Regex("/v/\\d+").Match(url).Captures[0].Value.Replace("/", "");
             }
-            catch
+            catch (Exception e)
             {
-                Logger.Log.Error($"Error parsing video URL {url}.");
+                Logger.Log.Error($"Error parsing video URL {url}.", e);
                 throw;
             }
         }
