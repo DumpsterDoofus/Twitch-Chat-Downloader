@@ -20,52 +20,56 @@ namespace TwitchChatDownloader
             _twitchClient = new TwitchClient();
         }
 
-        public List<VideoChatHistory> GetChatHistory(string path)
+        public IEnumerable<VideoChatHistory> GetChatHistory(string path)
         {
             switch (_inputType)
             {
                 case InputType.URL:
-                    var videoId = GetVideoIdFromUrl(path);
-                    return new List<VideoChatHistory> {GetChatFromVideo(new Video {_id = videoId})};
+                    var video = GetVideoFromUrl(path);
+                    return new List<VideoChatHistory> {GetChatFromVideo(video)};
                 case InputType.JSON:
                     return new List<VideoChatHistory> { GetChatFromJsonFile(path) };
                 case InputType.Highlights:
-                    return _twitchClient.GetVideosAll(GetChannelNameFromUrl(path), VideoType.Highlight).Select(GetChatFromVideo).ToList();
+                    return _twitchClient.GetVideosAll(GetChannelNameFromUrl(path).name, VideoType.Highlight).Select(GetChatFromVideo);
                 case InputType.PastBroadcasts:
-                    return _twitchClient.GetVideosAll(GetChannelNameFromUrl(path)).Select(GetChatFromVideo).ToList();
+                    return _twitchClient.GetVideosAll(GetChannelNameFromUrl(path).name).Select(GetChatFromVideo);
                 case InputType.JSONBatch:
                     var d = new DirectoryInfo(path);
                     var files = d.GetFiles("*.json");
-                    return files.Select(f => GetChatFromJsonFile(f.FullName)).ToList();
+                    return files.Select(f => GetChatFromJsonFile(f.FullName));
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
 
-        private static string GetVideoIdFromUrl(string url)
+        private Video GetVideoFromUrl(string url)
         {
+            string videoId;
             try
             {
-                return new Regex("/v/\\d+").Match(url).Captures[0].Value.Replace("/", "");
+                videoId = new Regex("/v/\\d+").Match(url).Captures[0].Value.Replace("/", "");
             }
             catch (Exception e)
             {
                 Logger.Log.Error($"Error parsing video URL {url}.", e);
                 throw;
             }
+            return _twitchClient.GetVideos(videoId);
         }
 
-        private static string GetChannelNameFromUrl(string url)
+        private Channel GetChannelNameFromUrl(string url)
         {
+            string channelName;
             try
             {
-                return url.Split('/')[3];
+                channelName = url.Split('/')[3];
             }
             catch (Exception e)
             {
                 Logger.Log.Error($"Unable to parse channel name from URL {url}.", e);
                 throw;
             }
+            return _twitchClient.GetChannels(channelName);
         }
 
         private VideoChatHistory GetChatFromVideo(Video video)

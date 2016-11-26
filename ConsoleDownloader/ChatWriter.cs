@@ -17,7 +17,7 @@ namespace TwitchChatDownloader
             _outputType = outputType;
         }
 
-        public void WriteChatHistory(List<VideoChatHistory> chatHistory)
+        public void WriteChatHistory(IEnumerable<VideoChatHistory> chatHistory)
         {
             switch (_outputType)
             {
@@ -51,8 +51,9 @@ namespace TwitchChatDownloader
                 var delay = (int)Math.Max(millisecondsToNextMessage, MinimumMillisecondsOnScreen);
                 var a = new TimeSpan(0, 0, 0, 0, (int)millisecondsIntoVideo);
                 var color = chatMessage.attributes.color ?? "#FFFFFF";
+                var name = chatMessage.attributes.tags.displayname ?? chatMessage.attributes.from;
                 s.AppendLine(a.ToString("hh\\:mm\\:ss\\,fff") + " --> " + a.Add(new TimeSpan(0, 0, 0, 0, delay)).ToString("hh\\:mm\\:ss\\,fff"));
-                s.AppendLine($"<font color=\"{color}\">{chatMessage.attributes.tags.displayname}</font>: {chatMessage.attributes.message}\n");
+                s.AppendLine($"<font color=\"{color}\">{name}</font>: {chatMessage.attributes.message}\n");
                 lineCount++;
             }
             var filename = GetSafeFilename($"{videoChatHistory.Video.title}-{videoChatHistory.Video._id}.srt");
