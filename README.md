@@ -24,12 +24,13 @@ In the future I may just make a prepackaged EXE so you don't have to build it.
 Usage is `TwitchChatDownloader.exe [flags]`
 
 Flags (case-insensitive):
-- `-path` (required): Either a URL of a Twitch video or channel, or the physical path of a previously-downloaded JSON file.
+- `-path` (required): Either a URL of a Twitch video or channel, or the physical path (can be either relative, like `JSON Files` or fully-qualified like `C:\Users\Peter\Documents\Visual Studio 2015\Projects\ReChat\ConsoleDownloader\bin\Debug\JSON Files`) of a previously-downloaded JSON file.
 - `-inputtype`: How the `path` gets processed.
  - `url` (default): Downloads a single video at the specified URL.
- - `file`: Path of a JSON file.
+ - `file`: Processes a JSON file.
  - `pastbroadcasts`: Downloads all past broadcasts of the channel at the specified URL.
  - `highlights`: Downloads all highlights of the channel at the specified URL.
+ - `jsonbatch`: Processes all JSON files in the specified directory.
 - `-outputtype`: How the chat gets saved.
  - `srt` (default): Messages are saved to an SRT file, which can be used as a subtitle track on video players. Messages stay onscreen for either 5 seconds or the time until the next message, whichever is longer. Usernames are colored with the same color as they do in chat.
  - `json`: Saves raw traffic in original form as received from Twitch's API. This is useful in the event I change the behavior of the SRT save process, since saving as SRT is "lossy" from an information standpoint.
@@ -49,7 +50,7 @@ TwitchChatDownloader -path https://www.twitch.tv/zfg1/v/69027652 -inputtype url 
 
 #### Converting a JSON file to SRT
 ```
-TwitchChatDownloader -path "JsonFromExample3.json" -inputtype file -outputtype srt`
+TwitchChatDownloader -path "JSON Files/JsonFromExample3.json" -inputtype file -outputtype srt`
 ```
 
 #### Saving all video highlights from a channel as SRT
@@ -62,4 +63,10 @@ TwitchChatDownloader -path https://www.twitch.tv/zfg1 -inputtype highlights -out
 
 ```
 TwitchChatDownloader -path https://www.twitch.tv/zfg1/v/69027652 -inputtype pastbroadcasts -outputtype json
+```
+
+#### Converting all JSON files in a folder to SRT
+
+```
+TwitchChatDownloader -path "JSON Files" -inputtype file -outputtype jsonbatch`
 ```
