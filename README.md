@@ -24,7 +24,7 @@ In the future I may just make a prepackaged EXE so you don't have to build it.
 Usage is `TwitchChatDownloader.exe [flags]`
 
 Flags (case-insensitive):
-- `-path` (required): Either a URL of a Twitch video or channel, or the physical path (can be either relative, like `JSON Files` or fully-qualified like `C:\Users\Peter\Documents\Visual Studio 2015\Projects\ReChat\ConsoleDownloader\bin\Debug\JSON Files`) of a previously-downloaded JSON file.
+- `-path` (required): Either a URL of a Twitch video or channel, or a physical path (can be either relative, like `JSON Files` or fully-qualified like `C:\Users\Peter\Documents\Visual Studio 2015\Projects\ReChat\ConsoleDownloader\bin\Debug\JSON Files`).
 - `-inputtype`: How the `path` gets processed.
  - `url` (default): Downloads a single video at the specified URL.
  - `file`: Processes a JSON file.
