@@ -53,7 +53,7 @@ TwitchChatDownloader -path https://www.twitch.tv/zfg1/v/69027652 -inputtype url 
 
 #### Converting a JSON file to SRT
 ```
-TwitchChatDownloader -path "JSON Files/JsonFromExample3.json" -inputtype json -outputtype srt`
+TwitchChatDownloader -path "JSON Files/JsonFromExample3.json" -inputtype json -outputtype srt
 ```
 
 #### Saving all video highlights from a channel as SRT
@@ -71,5 +71,5 @@ TwitchChatDownloader -path https://www.twitch.tv/zfg1 -inputtype pastbroadcasts 
 #### Converting all JSON files in a folder to SRT
 
 ```
-TwitchChatDownloader -path "JSON Files" -inputtype json -outputtype jsonbatch`
+TwitchChatDownloader -path "JSON Files" -inputtype json -outputtype jsonbatch
 ```
