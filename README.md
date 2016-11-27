@@ -27,9 +27,9 @@ Flags (case-insensitive):
 - `-path` (required): Either a URL of a Twitch video or channel, or a physical path (can be either relative, like `JSON Files` or fully-qualified like `C:\Users\Peter\Documents\Visual Studio 2015\Projects\ReChat\ConsoleDownloader\bin\Debug\JSON Files`).
 - `-inputtype`: How the `path` gets processed.
  - `url` (default): Downloads a single video at the specified URL.
- - `file`: Processes a JSON file.
  - `pastbroadcasts`: Downloads all past broadcasts of the channel at the specified URL.
  - `highlights`: Downloads all highlights of the channel at the specified URL.
+ - `json`: Processes a JSON file.
  - `jsonbatch`: Processes all JSON files in the specified directory.
 - `-outputtype`: How the chat gets saved.
  - `srt` (default): Messages are saved to an SRT file, which can be used as a subtitle track on video players. Messages stay onscreen for either 5 seconds or the time until the next message, whichever is longer. Usernames are colored with the same color as they do in chat.
@@ -50,7 +50,7 @@ TwitchChatDownloader -path https://www.twitch.tv/zfg1/v/69027652 -inputtype url 
 
 #### Converting a JSON file to SRT
 ```
-TwitchChatDownloader -path "JSON Files/JsonFromExample3.json" -inputtype file -outputtype srt`
+TwitchChatDownloader -path "JSON Files/JsonFromExample3.json" -inputtype json -outputtype srt`
 ```
 
 #### Saving all video highlights from a channel as SRT
@@ -68,5 +68,5 @@ TwitchChatDownloader -path https://www.twitch.tv/zfg1 -inputtype pastbroadcasts 
 #### Converting all JSON files in a folder to SRT
 
 ```
-TwitchChatDownloader -path "JSON Files" -inputtype file -outputtype jsonbatch`
+TwitchChatDownloader -path "JSON Files" -inputtype json -outputtype jsonbatch`
 ```
