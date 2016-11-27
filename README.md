@@ -39,8 +39,11 @@ Flags (case-insensitive):
 
 #### A single video, saving chat as SRT
 ```
+TwitchChatDownloader -path https://www.twitch.tv/zfg1/v/69027652
+```
+or
+```
 TwitchChatDownloader -path https://www.twitch.tv/zfg1/v/69027652 -inputtype url -outputtype srt
-TwitchChatDownloader -path https://www.twitch.tv/zfg1/v/69027652 (behaves same as previous)
 ```
 
 #### A single video, saving chat as JSON
