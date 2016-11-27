@@ -1,4 +1,4 @@
-## Twitch Chat Downloader
+# Twitch Chat Downloader
 
 Have you ever downloaded a [Twitch](https://twitch.tv) video using [YouTube-DL](https://github.com/rg3/youtube-dl), watched it, and wished you could download the chat too? Now you can.
 
