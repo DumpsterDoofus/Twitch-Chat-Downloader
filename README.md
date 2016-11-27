@@ -62,7 +62,7 @@ TwitchChatDownloader -path https://www.twitch.tv/zfg1 -inputtype highlights -out
 #### Saving all past broadcasts from a channel as JSON
 
 ```
-TwitchChatDownloader -path https://www.twitch.tv/zfg1/v/69027652 -inputtype pastbroadcasts -outputtype json
+TwitchChatDownloader -path https://www.twitch.tv/zfg1 -inputtype pastbroadcasts -outputtype json
 ```
 
 #### Converting all JSON files in a folder to SRT
