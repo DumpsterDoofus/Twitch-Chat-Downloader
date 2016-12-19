@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using ApiIntegrations.Clients;
 using ApiIntegrations.Models.Twitch;
 using Newtonsoft.Json;
@@ -20,19 +21,32 @@ namespace TwitchChatDownloader
             _twitchClient = new TwitchClient();
         }
 
-        public IEnumerable<VideoChatHistory> GetChatHistory(string path)
+        public async Task<IEnumerable<VideoChatHistory>> GetChatHistory(string path)
         {
             switch (_inputType)
             {
                 case InputType.URL:
-                    var video = GetVideoFromUrl(path);
-                    return new List<VideoChatHistory> {GetChatFromVideo(video)};
+                    var video = await GetVideoFromUrl(path);
+                    return new List<VideoChatHistory> {await GetChatFromVideo(video)};
                 case InputType.JSON:
                     return new List<VideoChatHistory> { GetChatFromJsonFile(path) };
                 case InputType.Highlights:
-                    return _twitchClient.GetVideosAll(GetChannelNameFromUrl(path).name, VideoType.Highlight).Select(GetChatFromVideo);
+                    var highlightsVideos = await _twitchClient.GetVideosAll((await GetChannelNameFromUrl(path)).name,
+                        VideoType.Highlight);
+                    var highlightsChats = new List<VideoChatHistory>();
+                    foreach (var v in highlightsVideos)
+                    {
+                        highlightsChats.Add(await GetChatFromVideo(v));
+                    }
+                    return highlightsChats;
                 case InputType.PastBroadcasts:
-                    return _twitchClient.GetVideosAll(GetChannelNameFromUrl(path).name).Select(GetChatFromVideo);
+                    var pastBroadcastVideos = await _twitchClient.GetVideosAll((await GetChannelNameFromUrl(path)).name);
+                    var pastBroadcastChats = new List<VideoChatHistory>();
+                    foreach (var v in pastBroadcastVideos)
+                    {
+                        pastBroadcastChats.Add(await GetChatFromVideo(v));
+                    }
+                    return pastBroadcastChats;
                 case InputType.JSONBatch:
                     var d = new DirectoryInfo(path);
                     var files = d.GetFiles("*.json");
@@ -42,7 +56,7 @@ namespace TwitchChatDownloader
             }
         }
 
-        private Video GetVideoFromUrl(string url)
+        private async Task<Video> GetVideoFromUrl(string url)
         {
             string videoId;
             try
@@ -54,10 +68,10 @@ namespace TwitchChatDownloader
                 Logger.Log.Error($"Error parsing video URL {url}.", e);
                 throw;
             }
-            return _twitchClient.GetVideos(videoId);
+            return await _twitchClient.GetVideos(videoId);
         }
 
-        private Channel GetChannelNameFromUrl(string url)
+        private async Task<Channel> GetChannelNameFromUrl(string url)
         {
             string channelName;
             try
@@ -69,13 +83,13 @@ namespace TwitchChatDownloader
                 Logger.Log.Error($"Unable to parse channel name from URL {url}.", e);
                 throw;
             }
-            return _twitchClient.GetChannels(channelName);
+            return await _twitchClient.GetChannels(channelName);
         }
 
-        private VideoChatHistory GetChatFromVideo(Video video)
+        private async Task<VideoChatHistory> GetChatFromVideo(Video video)
         {
             Logger.Log.Info($"Downloading chat for video ID {video._id}.");
-            return _twitchClient.GetReChatAll(video._id);
+            return await _twitchClient.GetReChatAll(video._id);
         }
 
         private VideoChatHistory GetChatFromJsonFile(string path)

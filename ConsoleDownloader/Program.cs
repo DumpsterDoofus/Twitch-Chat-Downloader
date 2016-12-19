@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace TwitchChatDownloader
 {
@@ -55,7 +56,7 @@ TwitchChatDownloader -path ""JSON Files"" -inputtype json -outputtype jsonbatch"
                     {
                         try
                         {
-                            Process(path, inputType, outputType);
+                            Process(path, inputType, outputType).Wait();
                         }
                         catch (Exception)
                         {
@@ -78,11 +79,11 @@ TwitchChatDownloader -path ""JSON Files"" -inputtype json -outputtype jsonbatch"
             }
         }
 
-        private static void Process(string path, InputType inputType, OutputType outputType)
+        private static async Task Process(string path, InputType inputType, OutputType outputType)
         {
             var chatReader = new ChatReader(inputType);
             var chatWriter = new ChatWriter(outputType);
-            var chatHistory = chatReader.GetChatHistory(path);
+            var chatHistory = await chatReader.GetChatHistory(path);
             chatWriter.WriteChatHistory(chatHistory);
         }
     }
