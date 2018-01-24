@@ -61,7 +61,7 @@ namespace TwitchChatDownloader
             string videoId;
             try
             {
-                videoId = new Regex("/v/\\d+").Match(url).Captures[0].Value.Replace("/", "");
+                videoId = new Regex("/videos/\\d+").Match(url).Captures[0].Value.Replace("/videos/", "");
             }
             catch (Exception e)
             {
@@ -86,10 +86,10 @@ namespace TwitchChatDownloader
             return await _twitchClient.GetChannels(channelName);
         }
 
-        private async Task<VideoChatHistory> GetChatFromVideo(Video video)
+        private async Task<IEnumerable<CommentsResponse>> GetChatFromVideo(Video video)
         {
             Logger.Log.Info($"Downloading chat for video ID {video._id}.");
-            return await _twitchClient.GetReChatAll(video._id);
+            return await _twitchClient.GetCommentsAll(int.Parse(video._id));
         }
 
         private VideoChatHistory GetChatFromJsonFile(string path)

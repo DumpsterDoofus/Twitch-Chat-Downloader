@@ -10,7 +10,8 @@ namespace TwitchChatDownloader
     internal class ChatWriter
     {
         private readonly OutputType _outputType;
-        private const int MinimumMillisecondsOnScreen = 5000;
+        private const int MaximumMillisecondsOnScreen = 5000;
+        private const int MaxMessagesOnScreen = 3;
 
         public ChatWriter(OutputType outputType)
         {
@@ -37,24 +38,23 @@ namespace TwitchChatDownloader
         private static void WriteToSrt(VideoChatHistory videoChatHistory)
         {
             var s = new StringBuilder();
-            var lineCount = 1;
             var startTimeMilliseconds = videoChatHistory.ChatTimespan.StartTimestampUnixSeconds*1000;
             var numMessages = videoChatHistory.ChatMessages.Count;
-            for (var i = 0; i < numMessages; i++)
+            for (var i = 0; i < numMessages - MaxMessagesOnScreen; i++)
             {
                 var chatMessage = videoChatHistory.ChatMessages[i];
-                var nextMessage = videoChatHistory.ChatMessages[i + 1 < numMessages ? i + 1 : i];
-                s.AppendLine(lineCount.ToString());
+                var nextMessage = videoChatHistory.ChatMessages[i + MaxMessagesOnScreen];
                 var millisecondsIntoVideo = chatMessage.attributes.TimestampUnixMilliseconds - startTimeMilliseconds;
                 var millisecondsToNextMessage = nextMessage.attributes.TimestampUnixMilliseconds -
                                                 chatMessage.attributes.TimestampUnixMilliseconds;
-                var delay = (int)Math.Max(millisecondsToNextMessage, MinimumMillisecondsOnScreen);
-                var a = new TimeSpan(0, 0, 0, 0, (int)millisecondsIntoVideo);
+                var messageStartTime = TimeSpan.FromMilliseconds(millisecondsIntoVideo);
+                var messageOnscreenTime = (int)Math.Min(millisecondsToNextMessage, MaximumMillisecondsOnScreen);
+                var messageEndTime = messageStartTime.Add(TimeSpan.FromMilliseconds(messageOnscreenTime));
                 var color = chatMessage.attributes.color ?? "#FFFFFF";
                 var name = chatMessage.attributes.tags.displayname ?? chatMessage.attributes.from;
-                s.AppendLine(a.ToString("hh\\:mm\\:ss\\,fff") + " --> " + a.Add(new TimeSpan(0, 0, 0, 0, delay)).ToString("hh\\:mm\\:ss\\,fff"));
+                s.AppendLine((i + 1).ToString());
+                s.AppendLine(messageStartTime.ToString("hh\\:mm\\:ss\\,fff") + " --> " + messageEndTime.ToString("hh\\:mm\\:ss\\,fff"));
                 s.AppendLine($"<font color=\"{color}\">{name}</font>: {chatMessage.attributes.message}\n");
-                lineCount++;
             }
             var filename = GetSafeFilename($"{videoChatHistory.Video.title}-{videoChatHistory.Video._id}.srt");
             WriteToRelativePath($"./SRT Files/{filename}", s.ToString());
