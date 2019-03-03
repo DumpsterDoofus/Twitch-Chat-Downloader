@@ -9,67 +9,25 @@ This console app downloads the chat on a Twitch video and converts it to an SRT 
 - Q: Why create this when [Chat Replay](https://help.twitch.tv/customer/portal/articles/2337148-chat-replay-faq) already exists?
  - A: Because Twitch Past Broadcasts are deleted after 30 days, and although you can download videos with YouTube-DL, at present you can't download the chat.
 
-## How to build
+## How to use
 
-1. Build solution in Visual Studio. 
+1. Ensure the [.NET Core runtime](https://dotnet.microsoft.com/download) is on the path.
+2. Download and unzip the [release](https://github.com/DumpsterDoofus/Twitch-Chat-Downloader/releases/download/1.0.0/TwitchChatDownloader.7z). 
+3. In PowerShell (or similar terminal), run `dotnet TwitchChatDownloader.dll --help` to display the help.
 
-2. The executable is at `..\ConsoleDownloader\bin\Debug\TwitchChatDownloader.exe`. 
+You may need to replace the `appsettings.json`'s `TwitchClientId` in case the one in source control ever becomes invalid (but it should work for now). You can get these by [registering an application at Twitch](https://www.twitch.tv/kraken/oauth2/clients/new). 
 
-You may need to replace the app.config's `TwitchClientId` in case the one I prepackaged in source control ever becomes invalid (but it should work for now). You can get these by [registering an application at Twitch](https://www.twitch.tv/kraken/oauth2/clients/new). Security note: [The Twitch Client ID is not a secret](https://dev.twitch.tv/docs/authentication/), which is why I leave it in source control.
-
-In the future I may just make a prepackaged EXE so you don't have to build it.
-
-## How to use 
-
-Usage is `TwitchChatDownloader.exe [flags]`
-
-Flags (case-insensitive):
-- `-path` (required): Either a URL of a Twitch video or channel, or a physical path (can be either relative, like `JSON Files` or fully-qualified like `C:\Users\Peter\Documents\Visual Studio 2015\Projects\ReChat\ConsoleDownloader\bin\Debug\JSON Files`).
-- `-inputtype`: How the `path` gets processed.
- - `url` (default): Downloads a single video at the specified URL.
- - `pastbroadcasts`: Downloads all past broadcasts of the channel at the specified URL.
- - `highlights`: Downloads all highlights of the channel at the specified URL.
- - `json`: Processes a JSON file.
- - `jsonbatch`: Processes all JSON files in the specified directory.
-- `-outputtype`: How the chat gets saved.
- - `srt` (default): Messages are saved to an SRT file, which can be used as a subtitle track on video players. Messages stay onscreen for either 5 seconds or the time until the next message, whichever is longer. Usernames are colored with the same color as they do in chat.
- - `json`: Saves raw traffic in original form as received from Twitch's API. This is useful in the event I change the behavior of the SRT save process, since saving as SRT is "lossy" from an information standpoint.
+> Security note: [The Twitch Client ID is not a secret](https://dev.twitch.tv/docs/authentication/), which is why I leave it in source control. Plz no abuserino!
 
 ### Examples
 
-#### A single video, saving chat as SRT
+#### Downloading for a single video (https://www.twitch.tv/videos/69027652)
 ```
-TwitchChatDownloader -path https://www.twitch.tv/zfg1/v/69027652
-```
-or
-```
-TwitchChatDownloader -path https://www.twitch.tv/zfg1/v/69027652 -inputtype url -outputtype srt
+dotnet TwitchChatDownloader.dll --videoid 69027652
 ```
 
-#### A single video, saving chat as JSON
-```
-TwitchChatDownloader -path https://www.twitch.tv/zfg1/v/69027652 -inputtype url -outputtype json
-```
-
-#### Converting a JSON file to SRT
-```
-TwitchChatDownloader -path "JSON Files/JsonFromExample3.json" -inputtype json -outputtype srt
-```
-
-#### Saving all video highlights from a channel as SRT
+#### Downloading all highlights from a user's channel (https://www.twitch.tv/zfg1)
 
 ```
-TwitchChatDownloader -path https://www.twitch.tv/zfg1 -inputtype highlights -outputtype srt
-```
-
-#### Saving all past broadcasts from a channel as JSON
-
-```
-TwitchChatDownloader -path https://www.twitch.tv/zfg1 -inputtype pastbroadcasts -outputtype json
-```
-
-#### Converting all JSON files in a folder to SRT
-
-```
-TwitchChatDownloader -path "JSON Files" -inputtype json -outputtype jsonbatch
+TwitchChatDownloaderdotnet TwitchChatDownloader.dll --username zfg1 --videotype 
 ```
