@@ -29,5 +29,5 @@ dotnet TwitchChatDownloader.dll --videoid 69027652
 #### Downloading all highlights from a user's channel (https://www.twitch.tv/zfg1)
 
 ```
-TwitchChatDownloaderdotnet TwitchChatDownloader.dll --username zfg1 --videotype 
+dotnet TwitchChatDownloader.dll --username zfg1 --videotype highlight
 ```
