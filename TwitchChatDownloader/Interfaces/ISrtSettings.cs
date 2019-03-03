@@ -2,7 +2,7 @@
 
 namespace TwitchChatDownloader.Interfaces
 {
-    interface ISrtSettings
+    public interface ISrtSettings
     {
         int MaxMessagesOnscreen { get; }
         TimeSpan MaxTimeOnscreen { get; }

@@ -4,7 +4,7 @@ using TwitchChatDownloader.Models;
 
 namespace TwitchChatDownloader.Interfaces
 {
-    interface ICommentsRetriever
+    internal interface ICommentsRetriever
     {
         Task<IEnumerable<InternalComment>> GetComments(InternalVideo video);
     }

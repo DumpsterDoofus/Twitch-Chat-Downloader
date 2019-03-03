@@ -6,7 +6,7 @@ using TwitchLib.Api.Core.Enums;
 
 namespace TwitchChatDownloader.Interfaces
 {
-    interface IVideosRetriever
+    public interface IVideosRetriever
     {
         Task<Result<IEnumerable<InternalVideo>>> GetVideos(string username, VideoType videoType);
     }

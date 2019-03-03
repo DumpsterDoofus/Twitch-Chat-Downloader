@@ -6,7 +6,7 @@ using TwitchChatDownloader.Models;
 
 namespace TwitchChatDownloader.Implementations
 {
-    class SrtLineWriter : ISrtLineWriter
+    internal class SrtLineWriter : ISrtLineWriter
     {
         private readonly ISrtSettings _srtSettings;
 

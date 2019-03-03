@@ -9,7 +9,7 @@ using TwitchLib.Api.Core.Enums;
 
 namespace TwitchChatDownloader.Implementations
 {
-    class LoggingVideosRetriever : IVideosRetriever
+    internal class LoggingVideosRetriever : IVideosRetriever
     {
         private readonly IVideosRetriever _videosRetriever;
         private readonly ILogger _logger;

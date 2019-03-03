@@ -5,13 +5,16 @@ using TwitchChatDownloader.Validation;
 
 namespace TwitchChatDownloader.Models
 {
-    class SrtSettings : Validatable, ISrtSettings
+    public class SrtSettings : Validatable, ISrtSettings
     {
         [Range(1, 10)]
-        public int MaxMessagesOnscreen { get; private set; }
+        public int MaxMessagesOnscreen { get; set; }
 
         [Range(1, 100)]
         public int MaxSecondsOnscreen { get; set; }
+
+        [Range(0, 1000)]
+        public int DeltaMilliseconds { get; set; }
 
         private TimeSpan _maxTimeOnscreen;
         public TimeSpan MaxTimeOnscreen
@@ -27,6 +30,18 @@ namespace TwitchChatDownloader.Models
             }
         }
 
-        public TimeSpan Delta { get; private set; } //TODO: Delete
+        private TimeSpan _delta;
+        public TimeSpan Delta
+        {
+            get
+            {
+                if (_delta == default)
+                {
+                    _delta = TimeSpan.FromMilliseconds(DeltaMilliseconds);
+                }
+
+                return _delta;
+            }
+        }
     }
 }

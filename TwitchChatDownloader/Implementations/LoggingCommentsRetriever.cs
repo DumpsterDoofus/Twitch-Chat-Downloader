@@ -7,7 +7,7 @@ using TwitchChatDownloader.Models;
 
 namespace TwitchChatDownloader.Implementations
 {
-    class LoggingCommentsRetriever : ICommentsRetriever
+    internal class LoggingCommentsRetriever : ICommentsRetriever
     {
         private readonly ICommentsRetriever _commentsRetriever;
         private readonly ILogger _logger;

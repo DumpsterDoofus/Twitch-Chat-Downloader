@@ -5,10 +5,10 @@ using TwitchChatDownloader.Validation;
 
 namespace TwitchChatDownloader.Models
 {
-    class SrtFileSettings : Validatable, ISrtFileSettings
+    public class SrtFileSettings : Validatable, ISrtFileSettings
     {
         [Required]
-        [ValidDirectory]
+        [ValidateDirectory]
         public string OutputDirectoryPath { get; set; }
 
         private DirectoryInfo _outputDirectory;

@@ -2,7 +2,7 @@
 
 namespace TwitchChatDownloader.Models
 {
-    class InternalComment
+    internal class InternalComment
     {
         public string Name { get; }
         public string Color { get; }

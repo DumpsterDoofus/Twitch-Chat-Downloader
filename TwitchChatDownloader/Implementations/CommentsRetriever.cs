@@ -8,7 +8,7 @@ using TwitchLib.Api;
 
 namespace TwitchChatDownloader.Implementations
 {
-    class CommentsRetriever : ICommentsRetriever
+    internal class CommentsRetriever : ICommentsRetriever
     {
         private readonly TwitchAPI _twitchApi;
 

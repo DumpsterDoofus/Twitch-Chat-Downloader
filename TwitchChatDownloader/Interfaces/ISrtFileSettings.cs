@@ -2,7 +2,7 @@
 
 namespace TwitchChatDownloader.Interfaces
 {
-    interface ISrtFileSettings
+    public interface ISrtFileSettings
     {
         DirectoryInfo OutputDirectory { get; }
     }

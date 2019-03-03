@@ -5,7 +5,7 @@ using TwitchChatDownloader.Models;
 
 namespace TwitchChatDownloader.Implementations
 {
-    class SrtFileWriter : ISrtFileWriter
+    internal class SrtFileWriter : ISrtFileWriter
     {
         private readonly ISrtFileSettings _srtFileSettings;
 
@@ -17,7 +17,7 @@ namespace TwitchChatDownloader.Implementations
         public async Task Write(InternalVideo internalVideo, string content)
         {
             var safeName = string.Join("_", internalVideo.Name.Split(Path.GetInvalidFileNameChars()));
-            await File.WriteAllTextAsync(Path.Combine(_srtFileSettings.OutputDirectory.FullName, $"{internalVideo.Id}_{safeName}.srt"), content);
+            await File.WriteAllTextAsync(Path.Combine(_srtFileSettings.OutputDirectory.FullName, $"{safeName}-v{internalVideo.Id}.srt"), content);
         }
     }
 }

@@ -10,7 +10,7 @@ using TwitchLib.Api.Core.Exceptions;
 
 namespace TwitchChatDownloader.Implementations
 {
-    class VideoRetriever : IVideoRetriever
+    internal class VideoRetriever : IVideoRetriever
     {
         private readonly TwitchAPI _twitchApi;
 

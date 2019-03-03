@@ -1,6 +1,6 @@
 ﻿namespace TwitchChatDownloader.Interfaces
 {
-    interface ITwitchSettings
+    public interface ITwitchSettings
     {
         string ClientId { get; }
     }

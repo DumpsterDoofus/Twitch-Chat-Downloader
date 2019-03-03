@@ -6,7 +6,7 @@ using TwitchChatDownloader.Models;
 
 namespace TwitchChatDownloader.Implementations
 {
-    class LoggingVideoWriter : IVideoWriter
+    internal class LoggingVideoWriter : IVideoWriter
     {
         private readonly IVideoWriter _videoWriter;
         private readonly ILogger _logger;

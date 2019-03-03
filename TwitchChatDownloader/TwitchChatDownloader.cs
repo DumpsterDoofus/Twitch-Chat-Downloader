@@ -7,13 +7,13 @@ using TwitchChatDownloader.Models;
 
 namespace TwitchChatDownloader
 {
-    class OptionsProcessor
+    internal class TwitchChatDownloader
     {
         private readonly IVideoRetriever _videoRetriever;
         private readonly IVideosRetriever _videosRetriever;
         private readonly IVideoWriter _videoWriter;
 
-        public OptionsProcessor(IVideoRetriever videoRetriever, IVideosRetriever videosRetriever, IVideoWriter videoWriter)
+        public TwitchChatDownloader(IVideoRetriever videoRetriever, IVideosRetriever videosRetriever, IVideoWriter videoWriter)
         {
             _videoRetriever = videoRetriever ?? throw new ArgumentNullException(nameof(videoRetriever));
             _videosRetriever = videosRetriever ?? throw new ArgumentNullException(nameof(videosRetriever));

@@ -3,7 +3,7 @@ using TwitchChatDownloader.Models;
 
 namespace TwitchChatDownloader.Interfaces
 {
-    interface ISrtLineWriter
+    internal interface ISrtLineWriter
     {
         IEnumerable<SrtLine> Write(IEnumerable<InternalComment> comment);
     }

@@ -2,7 +2,7 @@
 
 namespace TwitchChatDownloader.Interfaces
 {
-    interface ICommentsCacheSettings
+    internal interface ICommentsCacheSettings
     {
         DirectoryInfo CacheDirectory { get; }
     }

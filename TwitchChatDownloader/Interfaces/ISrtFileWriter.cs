@@ -3,7 +3,7 @@ using TwitchChatDownloader.Models;
 
 namespace TwitchChatDownloader.Interfaces
 {
-    interface ISrtFileWriter
+    internal interface ISrtFileWriter
     {
         Task Write(InternalVideo internalVideo, string content);
     }

@@ -1,0 +1,16 @@
+﻿{    
+  "TwitchSettings": {
+    "ClientId": "TestClientId"
+  },
+  "SrtFileSettings": {
+    "OutputDirectoryPath": "SrtFileFolder"
+  },
+  "CommentsCacheSettings": {
+    "CacheDirectoryPath": "CommentsCacheFolder"
+  },
+  "SrtSettings": {
+    "MaxMessagesOnscreen": 1,
+    "MaxSecondsOnscreen": 10,
+    "DeltaMilliseconds": 100
+  }
+}

@@ -10,23 +10,12 @@ using TwitchLib.Api.Core.Enums;
 namespace TwitchChatDownloader.UnitTests
 {
     [TestClass]
-    public class OptionsTests2
+    public class OptionsTests
     {
-        private void NotParsedFail(IEnumerable<Error> errors) => Assert.Fail($"Parsing failed, but was not expected to. \nErrors: {string.Join('\n', errors.Select(PrettyPrint))}");
-        private void ParsedFail(Options options) => Assert.Fail($"Parsing succeeded, but was not expected to. \nOptions: {PrettyPrint(options)}");
-        private void ParsedSucceed(Options options) {}
-        private void NotParsedSucceed(IEnumerable<Error> errors) { }
         private const string VideoTypeFlag = "--videotype";
         private const string VideoIdFlag = "--videoid";
         private const string UsernameFlag = "--username";
-        private const string OutputTypeFlag = "--outputtype";
-        private static string PrettyPrint(object o)
-        {
-            return $"Type:\n{o}\nValue:\n{JsonConvert.SerializeObject(o, Formatting.Indented)}";
-        }
-
-        //TODO: Add validation around values. Might need infrastructure around detecting equality of expected vs actual results.
-
+        
         [DataTestMethod]
         [DataRow("blastoise")]
         [DataRow("")]
@@ -34,8 +23,7 @@ namespace TwitchChatDownloader.UnitTests
         {
             var args = new[] {VideoTypeFlag, videoType};
             Parser.Default.ParseArguments<Options>(args)
-                .WithParsed(ParsedFail)
-                .WithNotParsed(NotParsedSucceed);
+                .WithParsed(Fail);
         }
 
         [TestMethod]
@@ -51,7 +39,7 @@ namespace TwitchChatDownloader.UnitTests
                     Assert.AreEqual(expectedVideoType, options.VideoType);
                     Assert.IsNull(options.Username);
                 })
-                .WithNotParsed(NotParsedFail);
+                .WithNotParsed(Fail);
         }
 
         [DataTestMethod]
@@ -65,7 +53,7 @@ namespace TwitchChatDownloader.UnitTests
             var args = new[] { VideoTypeFlag, videoType };
             Parser.Default.ParseArguments<Options>(args)
                 .WithParsed(options => Assert.AreEqual(expected, options.VideoType))
-                .WithNotParsed(NotParsedFail);
+                .WithNotParsed(Fail);
         }
 
         [DataTestMethod]
@@ -75,7 +63,7 @@ namespace TwitchChatDownloader.UnitTests
             var args = new[] { VideoIdFlag, videoId.ToString() };
             Parser.Default.ParseArguments<Options>(args)
                 .WithParsed(options => Assert.AreEqual(videoId, options.VideoId))
-                .WithNotParsed(NotParsedFail);
+                .WithNotParsed(Fail);
         }
 
         [DataTestMethod]
@@ -85,7 +73,14 @@ namespace TwitchChatDownloader.UnitTests
             var args = new[] { UsernameFlag, username };
             Parser.Default.ParseArguments<Options>(args)
                 .WithParsed(options => Assert.AreEqual(username, options.Username))
-                .WithNotParsed(NotParsedFail);
+                .WithNotParsed(Fail);
         }
+
+        private static void Fail(IEnumerable<Error> errors) =>
+            Assert.Fail($"Parsing failed, but was expected to succeed. \nErrors: {string.Join('\n', errors.Select(PrettyPrint))}");
+        private static void Fail(Options options) =>
+            Assert.Fail($"Parsing succeeded, but was expected to fail. \nOptions: {PrettyPrint(options)}");
+        private static string PrettyPrint(object o) =>
+            JsonConvert.SerializeObject(o, Formatting.Indented);
     }
 }

@@ -12,7 +12,7 @@ using TwitchLib.Api.Helix.Models.Videos;
 
 namespace TwitchChatDownloader.Implementations
 {
-    class VideosRetriever : IVideosRetriever
+    internal class VideosRetriever : IVideosRetriever
     {
         private readonly TwitchAPI _twitchApi;
 
