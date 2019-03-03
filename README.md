@@ -14,8 +14,26 @@ This console app downloads the chat on a Twitch video and converts it to an SRT 
 ### Setup
 
 1. Ensure the [.NET Core runtime](https://dotnet.microsoft.com/download) is on the path.
-2. Download and unzip the [release](https://github.com/DumpsterDoofus/Twitch-Chat-Downloader/releases/download/1.0.1/TwitchChatDownloader.7z).
-3. In PowerShell (or similar terminal), run `dotnet TwitchChatDownloader.dll --help` to display the help.
+2. Download and unzip the [release](https://github.com/DumpsterDoofus/Twitch-Chat-Downloader/releases/download/1.0.0/TwitchChatDownloader.7z).
+3. In PowerShell (or similar terminal), run `dotnet TwitchChatDownloader.dll --help` to display the help, printed below for convenience:
+
+```
+TwitchChatDownloader 1.0.0
+Copyright (C) 2019 TwitchChatDownloader
+
+  -v, --videoid      The video ID (for example, https://www.twitch.tv/videos/213105685 has ID 213105685). This will
+                     download subtitles for a single video.
+
+  -u, --username     The username (for example, https://www.twitch.tv/zfg1 has username zfg1). Use this if you want
+                     to download subtitles for all of a user's videos of a certain type.
+
+  -t, --videotype    (Default: All) The type of videos to download (only matters if a username is provided). Can be:
+                     All (default), Upload, Archive, or Highlight.
+
+  --help             Display this help screen.
+
+  --version          Display version information.
+```
 
 ### Examples
 
