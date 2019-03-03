@@ -21,13 +21,16 @@ namespace TwitchChatDownloader
         {
             try
             {
-                var twitchChatDownloader = ComposeObjectGraph();
-                await Parser.Default.ParseArguments<Options>(args)
-                    .MapResult(options => twitchChatDownloader.Process(options), errors =>
-                    {
-                        Console.WriteLine($"Command line parsing failed. Errors:\n{string.Join('\n', errors)}");
-                        return Task.CompletedTask;
-                    });
+                using (var container = new Container())
+                {
+                    var twitchChatDownloader = container.ComposeObjectGraph();
+                    await Parser.Default.ParseArguments<Options>(args)
+                        .MapResult(options => twitchChatDownloader.Process(options), errors =>
+                        {
+                            Console.WriteLine($"Command line parsing failed. Errors:\n{string.Join('\n', errors)}");
+                            return Task.CompletedTask;
+                        });
+                }
             }
             catch (Exception exception)
             {
@@ -36,7 +39,7 @@ namespace TwitchChatDownloader
             }
         }
 
-        private static TwitchChatDownloader ComposeObjectGraph()
+        private static TwitchChatDownloader ComposeObjectGraph(this Container container)
         {
             var configuration = new ConfigurationBuilder()
                     .AddJsonFile("appsettings.json")
@@ -44,33 +47,25 @@ namespace TwitchChatDownloader
             var logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(configuration)
                 .CreateLogger();
-            var srtSettings = configuration.GetValidatableOrThrow<SrtSettings>();
-            var commentsCacheSettings = configuration.GetValidatableOrThrow<CommentsCacheSettings>();
-            var srtFileSettings = configuration.GetValidatableOrThrow<SrtFileSettings>();
-            var twitchSettings = configuration.GetValidatableOrThrow<TwitchSettings>();
-            using (var container = new Container())
-            {
-                container.RegisterInstance<ILogger>(logger);
-                container.RegisterInstance<ISrtSettings>(srtSettings);
-                container.RegisterInstance<ISrtFileSettings>(srtFileSettings);
-                container.RegisterInstance<ITwitchSettings>(twitchSettings);
-                container.RegisterInstance<ICommentsCacheSettings>(commentsCacheSettings);
-                container.RegisterInstance(CreateTwitchApi(twitchSettings, logger));
-                container.RegisterSingleton<IVideoRetriever, VideoRetriever>();
-                container.RegisterDecorator<IVideoRetriever, LoggingVideoRetriever>(Lifestyle.Singleton);
-                container.RegisterSingleton<IVideosRetriever, VideosRetriever>();
-                container.RegisterDecorator<IVideosRetriever, LoggingVideosRetriever>(Lifestyle.Singleton);
-                container.RegisterSingleton<IVideoWriter, VideoWriter>();
-                container.RegisterDecorator<IVideoWriter, LoggingVideoWriter>(Lifestyle.Singleton);
-                container.RegisterSingleton<ICommentsRetriever, CommentsRetriever>();
-                container.RegisterDecorator<ICommentsRetriever, CachingCommentsRetriever>(Lifestyle.Singleton);
-                container.RegisterDecorator<ICommentsRetriever, LoggingCommentsRetriever>(Lifestyle.Singleton);
-                container.RegisterSingleton<ISrtWriter, SrtWriter>();
-                container.RegisterSingleton<ISrtFileWriter, SrtFileWriter>();
-                container.RegisterSingleton<ISrtLineWriter, SrtLineWriter>();
-                container.Verify();
-                return container.GetInstance<TwitchChatDownloader>();
-            }
+            container.RegisterSingleton<ILogger>(() => logger);
+            container.RegisterInstance<ISrtSettings>(configuration.GetValidatableOrThrow<SrtSettings>());
+            container.RegisterInstance<ISrtFileSettings>(configuration.GetValidatableOrThrow<SrtFileSettings>());
+            container.RegisterInstance<ICommentsCacheSettings>(configuration.GetValidatableOrThrow<CommentsCacheSettings>());
+            container.RegisterInstance(CreateTwitchApi(configuration.GetValidatableOrThrow<TwitchSettings>(), logger));
+            container.RegisterSingleton<IVideoRetriever, VideoRetriever>();
+            container.RegisterDecorator<IVideoRetriever, LoggingVideoRetriever>(Lifestyle.Singleton);
+            container.RegisterSingleton<IVideosRetriever, VideosRetriever>();
+            container.RegisterDecorator<IVideosRetriever, LoggingVideosRetriever>(Lifestyle.Singleton);
+            container.RegisterSingleton<IVideoWriter, VideoWriter>();
+            container.RegisterDecorator<IVideoWriter, LoggingVideoWriter>(Lifestyle.Singleton);
+            container.RegisterSingleton<ICommentsRetriever, CommentsRetriever>();
+            container.RegisterDecorator<ICommentsRetriever, CachingCommentsRetriever>(Lifestyle.Singleton);
+            container.RegisterDecorator<ICommentsRetriever, LoggingCommentsRetriever>(Lifestyle.Singleton);
+            container.RegisterSingleton<ISrtWriter, SrtWriter>();
+            container.RegisterSingleton<ISrtFileWriter, SrtFileWriter>();
+            container.RegisterSingleton<ISrtLineWriter, SrtLineWriter>();
+            container.Verify();
+            return container.GetInstance<TwitchChatDownloader>();
         }
 
         private static TwitchAPI CreateTwitchApi(ITwitchSettings twitchSettings, ILogger logger)
