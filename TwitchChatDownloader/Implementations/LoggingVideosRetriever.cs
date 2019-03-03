@@ -20,20 +20,12 @@ namespace TwitchChatDownloader.Implementations
             _logger = logger;
         }
 
-        public async Task<Result<IEnumerable<InternalVideo>>> GetVideos(string username, VideoType videoType)
+        public Task<Result<IEnumerable<InternalVideo>>> GetVideos(string username, VideoType videoType)
         {
             _logger.Information($"Getting info for all videos of type {videoType} from username {username}");
-            var videosResult = await _videosRetriever.GetVideos(username, videoType);
-            if (videosResult.IsFailure)
-            {
-                _logger.Error(videosResult.Error);
-            }
-            else
-            {
-                var videos = videosResult.Value.ToList();
-                _logger.Information($"Got the following {videos.Count} video names:\n{string.Join('\n', videos.Select(v => v.Name))}");
-            }
-            return videosResult;
+            return _videosRetriever.GetVideos(username, videoType)
+                .OnSuccess(internalVideos => _logger.Information($"Got info for the following {internalVideos.Count()} videos:\n{string.Join('\n', internalVideos.Select(v => v.Name))}"))
+                .OnFailure(error => _logger.Error($"Failed to get video info for user {username}."));
         }
     }
 }

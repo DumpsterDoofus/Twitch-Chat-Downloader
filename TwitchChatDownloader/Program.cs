@@ -63,6 +63,7 @@ namespace TwitchChatDownloader
             container.RegisterDecorator<ICommentsRetriever, LoggingCommentsRetriever>(Lifestyle.Singleton);
             container.RegisterSingleton<ISrtWriter, SrtWriter>();
             container.RegisterSingleton<ISrtFileWriter, SrtFileWriter>();
+            container.RegisterDecorator<ISrtFileWriter, LoggingSrtFileWriter>(Lifestyle.Singleton);
             container.RegisterSingleton<ISrtLineWriter, SrtLineWriter>();
             container.Verify();
             return container.GetInstance<TwitchChatDownloader>();

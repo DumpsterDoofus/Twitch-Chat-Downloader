@@ -17,19 +17,12 @@ namespace TwitchChatDownloader.Implementations
             _logger = logger;
         }
 
-        public async Task<Result<InternalVideo>> GetVideo(int videoId)
+        public Task<Result<InternalVideo>> GetVideo(int videoId)
         {
             _logger.Information($"Getting info for video ID: {videoId}");
-            var video = await _videoRetriever.GetVideo(videoId);
-            if (video.IsFailure)
-            {
-                _logger.Error(video.Error);
-            }
-            else
-            {
-                _logger.Information($"Got info for video \"{video.Value.Name}\"");                
-            }
-            return video;
+            return _videoRetriever.GetVideo(videoId)
+                .OnSuccess(internalVideo => _logger.Information($"Got info for video \"{internalVideo.Name}\""))
+                .OnFailure(error => _logger.Error($"Failed to get info for video ID {videoId}: {error}"));
         }
     }
 }

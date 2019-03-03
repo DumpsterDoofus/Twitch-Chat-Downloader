@@ -14,10 +14,12 @@ namespace TwitchChatDownloader.Implementations
             _srtFileSettings = srtFileSettings;
         }
 
-        public async Task Write(InternalVideo internalVideo, string content)
+        public async Task<FileInfo> Write(InternalVideo internalVideo, string content)
         {
-            var safeName = string.Join("_", internalVideo.Name.Split(Path.GetInvalidFileNameChars()));
-            await File.WriteAllTextAsync(Path.Combine(_srtFileSettings.OutputDirectory.FullName, $"{safeName}-v{internalVideo.Id}.srt"), content);
+            var safeName = string.Concat(internalVideo.Name.Split(Path.GetInvalidFileNameChars()));
+            var path = Path.Combine(_srtFileSettings.OutputDirectory.FullName, $"{safeName}-v{internalVideo.Id}.srt");
+            await File.WriteAllTextAsync(path, content);
+            return new FileInfo(path);
         }
     }
 }
