@@ -24,12 +24,12 @@ namespace TwitchChatDownloader.Implementations
             var cachePath = GetCachePath(video);
             if (File.Exists(cachePath))
             {
-                var text = await File.ReadAllTextAsync(cachePath);
+                var text = await File.ReadAllTextAsync(cachePath).ConfigureAwait(false);
                 return JsonConvert.DeserializeObject<IEnumerable<InternalComment>>(text);
             }
 
-            var comments = await _commentsRetriever.GetComments(video);
-            await File.WriteAllTextAsync(cachePath, JsonConvert.SerializeObject(comments));
+            var comments = await _commentsRetriever.GetComments(video).ConfigureAwait(false);
+            await File.WriteAllTextAsync(cachePath, JsonConvert.SerializeObject(comments)).ConfigureAwait(false);
             return comments;
         }
 

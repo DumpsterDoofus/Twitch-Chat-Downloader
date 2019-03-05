@@ -23,19 +23,19 @@ namespace TwitchChatDownloader
         public async Task Process(Options options)
         {
             var videos = new List<InternalVideo>();
-            if (options.VideoId != 0)
+            if (options.VideoId.HasValue)
             {
-                (await _videoRetriever.GetVideo(options.VideoId))
-                    .OnSuccess(video => videos.Add(video));
+                await _videoRetriever.GetVideo(options.VideoId.Value)
+                    .OnSuccess(video => videos.Add(video)).ConfigureAwait(false);
             }
             if (options.Username != null)
             {
-                (await _videosRetriever.GetVideos(options.Username, options.VideoType))
-                    .OnSuccess(userVideos => videos.AddRange(userVideos));
+                await _videosRetriever.GetVideos(options.Username, options.VideoType)
+                    .OnSuccess(userVideos => videos.AddRange(userVideos)).ConfigureAwait(false);
             }
             foreach (var video in videos)
             {
-                await _videoWriter.Write(video);
+                await _videoWriter.Write(video).ConfigureAwait(false);
             }
         }
     }

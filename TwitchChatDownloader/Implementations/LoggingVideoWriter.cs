@@ -20,7 +20,7 @@ namespace TwitchChatDownloader.Implementations
         public async Task Write(InternalVideo internalVideo)
         {
             _logger.Information($"Saving video {internalVideo.Name}.");
-            await _videoWriter.Write(internalVideo);
+            await _videoWriter.Write(internalVideo).ConfigureAwait(false);
             _logger.Information("Done saving video chat.");
         }
     }

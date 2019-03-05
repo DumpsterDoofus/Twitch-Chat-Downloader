@@ -24,7 +24,7 @@ namespace TwitchChatDownloader.Implementations
             var content = string.Join("",
                 srtLines.Select((srtLine, index) =>
                     $"{index + 1}\n{srtLine.StartTime:hh\\:mm\\:ss\\,fff} --> {srtLine.EndTime:hh\\:mm\\:ss\\,fff}\n{srtLine.Message}\n"));
-            await _srtFileWriter.Write(video, content);
+            await _srtFileWriter.Write(video, content).ConfigureAwait(false);
         }
     }
 }

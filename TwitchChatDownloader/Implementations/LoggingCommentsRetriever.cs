@@ -21,7 +21,7 @@ namespace TwitchChatDownloader.Implementations
         public async Task<IEnumerable<InternalComment>> GetComments(InternalVideo video)
         {
             _logger.Information($"Getting comments for video {video.Name}, ID {video.Id}.");
-            var comments = (await _commentsRetriever.GetComments(video)).ToList();
+            var comments = (await _commentsRetriever.GetComments(video).ConfigureAwait(false)).ToList();
             if (comments.Count == 0)
             {
                 _logger.Warning("No comments found for video.");

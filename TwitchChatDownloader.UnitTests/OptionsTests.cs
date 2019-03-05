@@ -30,12 +30,11 @@ namespace TwitchChatDownloader.UnitTests
         public void NoArgumentsShouldParseSaneDefaults()
         {
             var args = new string[] {};
-            const int expectedVideoId = 0;
             const VideoType expectedVideoType = VideoType.All;
             Parser.Default.ParseArguments<Options>(args)
                 .WithParsed(options =>
                 {
-                    Assert.AreEqual(expectedVideoId, options.VideoId);
+                    Assert.IsNull(options.VideoId);
                     Assert.AreEqual(expectedVideoType, options.VideoType);
                     Assert.IsNull(options.Username);
                 })

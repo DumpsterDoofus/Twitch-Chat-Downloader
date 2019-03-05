@@ -19,7 +19,7 @@ namespace TwitchChatDownloader.Implementations
 
         public async Task<IEnumerable<InternalComment>> GetComments(InternalVideo video)
         {
-            var comments = await _twitchApi.Undocumented.GetAllCommentsAsync(video.Id.ToString());
+            var comments = await _twitchApi.Undocumented.GetAllCommentsAsync(video.Id.ToString()).ConfigureAwait(false);
             return comments
                 .SelectMany(page => page.Comments)
                 .Select(comment =>
