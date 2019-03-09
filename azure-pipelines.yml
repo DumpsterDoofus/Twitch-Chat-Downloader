@@ -5,7 +5,7 @@ trigger:
     - master
     
 pool:
-  vmImage: 'Ubuntu-16.04'
+  vmImage: 'vs2017-win2016'
 
 steps:
 - task: DotNetCoreCLI@2
@@ -24,6 +24,7 @@ steps:
   displayName: 'Build TwitchChatDownloader'
   inputs:
     command: publish
+    publishWebProjects: false
     projects: 'TwitchChatDownloader\TwitchChatDownloader.csproj'
     arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)\TwitchChatDownloader'
 
