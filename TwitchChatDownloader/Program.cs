@@ -24,12 +24,16 @@ namespace TwitchChatDownloader
                 using (var container = new Container())
                 {
                     var twitchChatDownloader = container.ComposeObjectGraph();
-                    await Parser.Default.ParseArguments<Options>(args)
-                        .MapResult(options => twitchChatDownloader.Process(options), errors =>
-                        {
-                            Console.WriteLine($"Command line parsing failed. Errors:\n{string.Join('\n', errors)}");
-                            return Task.CompletedTask;
-                        }).ConfigureAwait(false);
+                    await Parser.Default.ParseArguments<UserOptions, VideoOptions>(args)
+                        .MapResult(
+                            (UserOptions userOptions) => twitchChatDownloader.Process(userOptions),
+                            (VideoOptions videoOptions) => twitchChatDownloader.Process(videoOptions),
+                            errors =>
+                            {
+                                Console.WriteLine($"Command line parsing failed. Errors:\n{string.Join('\n', errors)}");
+                                return Task.CompletedTask;
+                            })
+                        .ConfigureAwait(false);
                 }
             }
             catch (Exception exception)

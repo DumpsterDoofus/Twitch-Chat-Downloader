@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using TwitchChatDownloader.Interfaces;
@@ -20,23 +19,18 @@ namespace TwitchChatDownloader
             _videoWriter = videoWriter ?? throw new ArgumentNullException(nameof(videoWriter));
         }
 
-        public async Task Process(Options options)
-        {
-            var videos = new List<InternalVideo>();
-            if (options.VideoId.HasValue)
-            {
-                await _videoRetriever.GetVideo(options.VideoId.Value)
-                    .OnSuccess(video => videos.Add(video)).ConfigureAwait(false);
-            }
-            if (options.Username != null)
-            {
-                await _videosRetriever.GetVideos(options.Username, options.VideoType)
-                    .OnSuccess(userVideos => videos.AddRange(userVideos)).ConfigureAwait(false);
-            }
-            foreach (var video in videos)
-            {
-                await _videoWriter.Write(video).ConfigureAwait(false);
-            }
-        }
+        public async Task Process(VideoOptions options) => 
+            await _videoRetriever.GetVideo(options.VideoId)
+                .OnSuccess(internalVideo => _videoWriter.Write(internalVideo).ConfigureAwait(false));
+
+        public async Task Process(UserOptions options) => 
+            await _videosRetriever.GetVideos(options.Username, options.VideoType)
+                .OnSuccess(async internalVideos =>
+                {
+                    foreach (var video in internalVideos)
+                    {
+                        await _videoWriter.Write(video).ConfigureAwait(false);
+                    }
+                });
     }
 }
