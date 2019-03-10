@@ -1,5 +1,7 @@
 # Twitch Chat Downloader
 
+[![Build Status](https://dev.azure.com/peterrichter128/Twitch-Chat-Downloader/_apis/build/status/DumpsterDoofus.Twitch-Chat-Downloader?branchName=master)](https://dev.azure.com/peterrichter128/Twitch-Chat-Downloader/_build/latest?definitionId=2&branchName=master)
+
 Have you ever downloaded a [Twitch](https://twitch.tv) video using [YouTube-DL](https://github.com/rg3/youtube-dl), watched it, and wished you could download the chat too? Now you can.
 
 This console app downloads the chat on a Twitch video and converts it to an SRT file, so you can read chat as subtitles while watching the video. Here's it in action on VLC:
