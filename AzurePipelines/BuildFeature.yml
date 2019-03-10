@@ -30,14 +30,3 @@ steps:
     publishWebProjects: false
     projects: 'TwitchChatDownloader\TwitchChatDownloader.csproj'
     arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)\TwitchChatDownloader'
-
-- task: GitHubRelease@0
-  displayName: 'Publish release to GitHub'
-  inputs:
-    gitHubConnection: 'DumpsterDoofus'
-    repositoryName: 'DumpsterDoofus/Twitch-Chat-Downloader'
-    action: 'create'
-    target: '$(Build.SourceVersion)'
-    tagSource: 'Git tag'
-    tag: '$(releaseVersion)'
-    assets: '$(Build.ArtifactStagingDirectory)\TwitchChatDownloader\*'
