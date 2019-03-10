@@ -1,3 +1,6 @@
+variables:
+  releaseVersion: '1.1.0'
+
 name: Build Trigger On Master
 trigger:
   branches:
@@ -36,5 +39,5 @@ steps:
     action: 'create'
     target: '$(Build.SourceVersion)'
     tagSource: 'Git tag'
-    tag: '1.1.0'
-    assets: '$(Build.ArtifactStagingDirectory)/*'
+    tag: '$(releaseVersion)'
+    assets: '$(Build.ArtifactStagingDirectory)/TwitchChatDownloader'
