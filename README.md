@@ -16,33 +16,62 @@ This console app downloads the chat on a Twitch video and converts it to an SRT 
 ### Setup
 
 1. Ensure the [.NET Core runtime](https://dotnet.microsoft.com/download) is on the path.
-2. Download and unzip the [release](https://github.com/DumpsterDoofus/Twitch-Chat-Downloader/releases/download/1.0.0/TwitchChatDownloader.7z).
-3. In PowerShell (or similar terminal), run `dotnet TwitchChatDownloader.dll --help` to display the help, printed below for convenience:
+2. Download and unzip the [latest release](https://github.com/DumpsterDoofus/Twitch-Chat-Downloader/releases).
+
+### Documentation
+
+In PowerShell (or similar terminal), run `dotnet TwitchChatDownloader.dll` to display the help, printed below for convenience:
 
 ```
-TwitchChatDownloader 1.0.0
-Copyright (C) 2019 TwitchChatDownloader
+ERROR(S):
+  No verb selected.
 
-  -v, --videoid      The video ID (for example, https://www.twitch.tv/videos/213105685 has ID 213105685). This will
-                     download subtitles for a single video.
+  user       Download chat for all of a user's videos.
 
-  -u, --username     The username (for example, https://www.twitch.tv/zfg1 has username zfg1). Use this if you want
-                     to download subtitles for all of a user's videos of a certain type.
+  video      Download a single video.
 
-  -t, --videotype    (Default: All) The type of videos to download (only matters if a username is provided). Can be:
-                     All (default), Upload, Archive, or Highlight.
+  help       Display more information on a specific command.
+
+  version    Display version information.
+```
+
+If you run `dotnet TwitchChatDownloader.dll user`, you'll get this help:
+
+```
+ERROR(S):
+  Required option 'u, username' is missing.
+
+  -u, --username     Required. The username (for example, https://www.twitch.tv/zfg1 has username zfg1).
+
+  -t, --videotype    (Default: All) The type of videos to download. Can be: All, Upload, Archive, or Highlight.
 
   --help             Display this help screen.
 
   --version          Display version information.
 ```
 
+And if you run `dotnet TwitchChatDownloader.dll video`, you'll get this help:
+
+```
+ERROR(S):
+  Required option 'v, videoid' is missing.
+
+  -v, --videoid    Required. The video ID (for example, https://www.twitch.tv/videos/213105685 has ID 213105685). This
+                   will download subtitles for a single video.
+
+  --help           Display this help screen.
+
+  --version        Display version information.
+```
+
+Hopefully this is self-explanatory, but if not, below are some examples.
+
 ### Examples
 
 #### Downloading for a single video (https://www.twitch.tv/videos/69027652)
 
 ```
-dotnet TwitchChatDownloader.dll --videoid 69027652
+dotnet TwitchChatDownloader.dll video --videoid 69027652
 ```
 
 Example log output:
@@ -59,10 +88,10 @@ Example log output:
 
 In this case, it saved off a single SRT file (`Double 46-v69027652.srt`) containing the comments as subtitles.
 
-#### Downloading all highlights from a user's channel (https://www.twitch.tv/zfg1)
+#### Downloading only highlights from a user's channel (https://www.twitch.tv/zfg1)
 
 ```
-dotnet TwitchChatDownloader.dll --username zfg1 --videotype highlight
+dotnet TwitchChatDownloader.dll user --username zfg1 --videotype highlight
 ```
 
 This will download a bunch of SRT files (for each highlight-type video).
@@ -79,3 +108,9 @@ The `appsettings.json` contains configuration settings that you can edit, such a
 - `CommentsCacheSettings:CacheDirectoryPath`: This app reaches out to Twitch's API to get comments for a video. Comments for videos are cached on disk, so that subsequent runs for the same video don't have to reach out over the network again, speeding up subsequent runs. This is useful if you've tweaked some `SrtSettings`, and want to rerun a download and not have to wait as long.
 - `Serilog:WriteTo`: Contains [Serilog](https://github.com/serilog/serilog-settings-configuration) settings such as the file log path, and verbosity levels. May be useful for debugging purposes.
 - `TwitchSettings:ClientId`: You can get a different Client ID by [registering an application at Twitch](https://dev.twitch.tv/docs/authentication/#registration). I've included a valid one, so you shouldn't have to change this, unless it gets revoked due to abuse.
+
+## How To Contribute
+
+If you want to improve something (fix a bug, or add an enhancement), then file a pull request. Once CI checks pass, it's reviewed, and merged, a new release will automatically be published.
+
+If you don't know how to implement the improvement, then file an issue and describe what you'd like to see improved. Hopefully someone will implement it!
