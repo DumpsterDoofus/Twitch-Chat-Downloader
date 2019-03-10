@@ -40,4 +40,4 @@ steps:
     target: '$(Build.SourceVersion)'
     tagSource: 'Git tag'
     tag: '$(releaseVersion)'
-    assets: '$(Build.ArtifactStagingDirectory)/TwitchChatDownloader'
+    assets: '$(Build.ArtifactStagingDirectory)/*'
