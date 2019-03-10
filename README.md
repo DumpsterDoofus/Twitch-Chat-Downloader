@@ -108,3 +108,9 @@ The `appsettings.json` contains configuration settings that you can edit, such a
 - `CommentsCacheSettings:CacheDirectoryPath`: This app reaches out to Twitch's API to get comments for a video. Comments for videos are cached on disk, so that subsequent runs for the same video don't have to reach out over the network again, speeding up subsequent runs. This is useful if you've tweaked some `SrtSettings`, and want to rerun a download and not have to wait as long.
 - `Serilog:WriteTo`: Contains [Serilog](https://github.com/serilog/serilog-settings-configuration) settings such as the file log path, and verbosity levels. May be useful for debugging purposes.
 - `TwitchSettings:ClientId`: You can get a different Client ID by [registering an application at Twitch](https://dev.twitch.tv/docs/authentication/#registration). I've included a valid one, so you shouldn't have to change this, unless it gets revoked due to abuse.
+
+## How To Contribute
+
+If you want to improve something (fix a bug, or add an enhancement), then file a pull request. Once CI checks pass, it's reviewed, and merged, a new release will automatically be published.
+
+If you don't know how to implement the improvement, then file an issue and describe what you'd like to see improved. Hopefully someone will implement it!
