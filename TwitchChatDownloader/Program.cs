@@ -30,7 +30,7 @@ namespace TwitchChatDownloader
                             (VideoOptions videoOptions) => twitchChatDownloader.Process(videoOptions),
                             errors =>
                             {
-                                Console.WriteLine($"Command line parsing failed. Errors:\n{string.Join('\n', errors)}");
+                                Console.WriteLine($"\nCommand line parsing failed. Errors:\n{string.Join('\n', errors)}");
                                 return Task.CompletedTask;
                             })
                         .ConfigureAwait(false);
@@ -38,7 +38,7 @@ namespace TwitchChatDownloader
             }
             catch (Exception exception)
             {
-                Console.WriteLine($"Something really bad happened. Application shutting down.\n{exception}");
+                Console.WriteLine($"\nSomething really bad happened. Application shutting down.\n{exception}");
                 Environment.Exit(-1);
             }
         }

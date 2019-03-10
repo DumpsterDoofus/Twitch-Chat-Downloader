@@ -17,32 +17,32 @@ This console app downloads the chat on a Twitch video and converts it to an SRT 
 
 1. Ensure the [.NET Core runtime](https://dotnet.microsoft.com/download) is on the path.
 2. Download and unzip the [release](https://github.com/DumpsterDoofus/Twitch-Chat-Downloader/releases/download/1.0.0/TwitchChatDownloader.7z).
-3. In PowerShell (or similar terminal), run `dotnet TwitchChatDownloader.dll --help` to display the help, printed below for convenience:
+3. In PowerShell (or similar terminal), run `dotnet TwitchChatDownloader.dll` to display the help, printed below for convenience:
 
 ```
-TwitchChatDownloader 1.0.0
+TwitchChatDownloader 1.1.1
 Copyright (C) 2019 TwitchChatDownloader
 
-  -v, --videoid      The video ID (for example, https://www.twitch.tv/videos/213105685 has ID 213105685). This will
-                     download subtitles for a single video.
+ERROR(S):
+  No verb selected.
 
-  -u, --username     The username (for example, https://www.twitch.tv/zfg1 has username zfg1). Use this if you want
-                     to download subtitles for all of a user's videos of a certain type.
+  user       Download chat for all of a user's videos.
 
-  -t, --videotype    (Default: All) The type of videos to download (only matters if a username is provided). Can be:
-                     All (default), Upload, Archive, or Highlight.
+  video      Download a single video.
 
-  --help             Display this help screen.
+  help       Display more information on a specific command.
 
-  --version          Display version information.
+  version    Display version information.
 ```
+
+If you run the above verbs without arguments (for example, `dotnet TwitchChatDownloader.dll video`), you'll be presented with even more help info.
 
 ### Examples
 
 #### Downloading for a single video (https://www.twitch.tv/videos/69027652)
 
 ```
-dotnet TwitchChatDownloader.dll --videoid 69027652
+dotnet TwitchChatDownloader.dll video --videoid 69027652
 ```
 
 Example log output:
@@ -62,7 +62,7 @@ In this case, it saved off a single SRT file (`Double 46-v69027652.srt`) contain
 #### Downloading all highlights from a user's channel (https://www.twitch.tv/zfg1)
 
 ```
-dotnet TwitchChatDownloader.dll --username zfg1 --videotype highlight
+dotnet TwitchChatDownloader.dll user --username zfg1 --videotype highlight
 ```
 
 This will download a bunch of SRT files (for each highlight-type video).
