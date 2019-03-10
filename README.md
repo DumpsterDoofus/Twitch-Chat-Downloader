@@ -16,16 +16,13 @@ This console app downloads the chat on a Twitch video and converts it to an SRT 
 ### Setup
 
 1. Ensure the [.NET Core runtime](https://dotnet.microsoft.com/download) is on the path.
-2. Download and unzip the [release](https://github.com/DumpsterDoofus/Twitch-Chat-Downloader/releases/download/1.0.0/TwitchChatDownloader.7z).
+2. Download and unzip the [latest release](https://github.com/DumpsterDoofus/Twitch-Chat-Downloader/releases).
 
 ### Documentation
 
 In PowerShell (or similar terminal), run `dotnet TwitchChatDownloader.dll` to display the help, printed below for convenience:
 
 ```
-TwitchChatDownloader 1.1.1
-Copyright (C) 2019 TwitchChatDownloader
-
 ERROR(S):
   No verb selected.
 
