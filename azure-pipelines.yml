@@ -35,5 +35,6 @@ steps:
     repositoryName: 'Twitch-Chat-Downloader'
     action: 'create'
     target: '$(Build.SourceVersion)'
-    tagSource: 'auto'
+    tagSource: 'Git tag'
+    tag: '1.1.0'
     assets: '$(Build.ArtifactStagingDirectory)/*'
