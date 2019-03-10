@@ -17,7 +17,10 @@ This console app downloads the chat on a Twitch video and converts it to an SRT 
 
 1. Ensure the [.NET Core runtime](https://dotnet.microsoft.com/download) is on the path.
 2. Download and unzip the [release](https://github.com/DumpsterDoofus/Twitch-Chat-Downloader/releases/download/1.0.0/TwitchChatDownloader.7z).
-3. In PowerShell (or similar terminal), run `dotnet TwitchChatDownloader.dll` to display the help, printed below for convenience:
+
+### Documentation
+
+In PowerShell (or similar terminal), run `dotnet TwitchChatDownloader.dll` to display the help, printed below for convenience:
 
 ```
 TwitchChatDownloader 1.1.1
@@ -35,7 +38,36 @@ ERROR(S):
   version    Display version information.
 ```
 
-If you run the above verbs without arguments (for example, `dotnet TwitchChatDownloader.dll video`), you'll be presented with even more help info.
+If you run `dotnet TwitchChatDownloader.dll user`, you'll get this help:
+
+```
+ERROR(S):
+  Required option 'u, username' is missing.
+
+  -u, --username     Required. The username (for example, https://www.twitch.tv/zfg1 has username zfg1).
+
+  -t, --videotype    (Default: All) The type of videos to download. Can be: All, Upload, Archive, or Highlight.
+
+  --help             Display this help screen.
+
+  --version          Display version information.
+```
+
+And if you run `dotnet TwitchChatDownloader.dll video`, you'll get this help:
+
+```
+ERROR(S):
+  Required option 'v, videoid' is missing.
+
+  -v, --videoid    Required. The video ID (for example, https://www.twitch.tv/videos/213105685 has ID 213105685). This
+                   will download subtitles for a single video.
+
+  --help           Display this help screen.
+
+  --version        Display version information.
+```
+
+Hopefully this is self-explanatory, but if not, below are some examples.
 
 ### Examples
 
@@ -59,7 +91,7 @@ Example log output:
 
 In this case, it saved off a single SRT file (`Double 46-v69027652.srt`) containing the comments as subtitles.
 
-#### Downloading all highlights from a user's channel (https://www.twitch.tv/zfg1)
+#### Downloading only highlights from a user's channel (https://www.twitch.tv/zfg1)
 
 ```
 dotnet TwitchChatDownloader.dll user --username zfg1 --videotype highlight
