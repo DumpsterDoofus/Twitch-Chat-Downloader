@@ -33,10 +33,7 @@ steps:
   inputs:
     gitHubConnection: 'DumpsterDoofus'
     repositoryName: 'Twitch-Chat-Downloader'
-
-- task: PublishPipelineArtifact@0
-  displayName: 'Publish TwitchChatDownloader Artifact'
-  inputs:
-    artifactName: 'TwitchChatDownloader'
-    targetPath: '$(Build.ArtifactStagingDirectory)\TwitchChatDownloader'
-
+    action: 'create'
+    target: '$(Build.SourceVersion)'
+    tagSource: 'auto'
+    assets: '$(Build.ArtifactStagingDirectory)/*'
