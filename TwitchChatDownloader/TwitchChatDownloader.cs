@@ -21,7 +21,7 @@ namespace TwitchChatDownloader
 
         public async Task Process(VideoOptions options) => 
             await _videoRetriever.GetVideo(options.VideoId)
-                .OnSuccess(internalVideo => _videoWriter.Write(internalVideo).ConfigureAwait(false));
+                .OnSuccess(internalVideo => _videoWriter.Write(internalVideo));
 
         public async Task Process(UserOptions options) => 
             await _videosRetriever.GetVideos(options.Username, options.VideoType)
@@ -29,7 +29,7 @@ namespace TwitchChatDownloader
                 {
                     foreach (var video in internalVideos)
                     {
-                        await _videoWriter.Write(video).ConfigureAwait(false);
+                        await _videoWriter.Write(video);
                     }
                 });
     }

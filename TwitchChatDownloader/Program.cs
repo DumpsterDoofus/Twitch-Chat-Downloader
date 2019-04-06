@@ -32,8 +32,7 @@ namespace TwitchChatDownloader
                             {
                                 Console.WriteLine($"\nCommand line parsing failed. Errors:\n{string.Join('\n', errors)}");
                                 return Task.CompletedTask;
-                            })
-                        .ConfigureAwait(false);
+                            });
                 }
             }
             catch (Exception exception)

@@ -18,7 +18,7 @@ namespace TwitchChatDownloader.Implementations
         {
             var safeName = string.Concat(internalVideo.Name.Split(Path.GetInvalidFileNameChars()));
             var path = Path.Combine(_srtFileSettings.OutputDirectory.FullName, $"{safeName}-v{internalVideo.Id}.srt");
-            await File.WriteAllTextAsync(path, content).ConfigureAwait(false);
+            await File.WriteAllTextAsync(path, content);
             return new FileInfo(path);
         }
     }

@@ -23,7 +23,7 @@ namespace TwitchChatDownloader.Implementations
         {
             try
             {
-                var videos = (await _twitchApi.Helix.Videos.GetVideoAsync(new List<string> {videoId.ToString()}).ConfigureAwait(false)).Videos;
+                var videos = (await _twitchApi.Helix.Videos.GetVideoAsync(new List<string> {videoId.ToString()})).Videos;
                 var numVideos = videos.Length;
                 if (numVideos != 1)
                 {

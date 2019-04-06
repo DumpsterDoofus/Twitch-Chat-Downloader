@@ -20,7 +20,7 @@ namespace TwitchChatDownloader.Implementations
 
         public async Task<FileInfo> Write(InternalVideo internalVideo, string content)
         {
-            var fileInfo = await _srtFileWriter.Write(internalVideo, content).ConfigureAwait(false);
+            var fileInfo = await _srtFileWriter.Write(internalVideo, content);
             _logger.Information($"Wrote SRT file to {fileInfo.FullName}.");
             return fileInfo;
         }

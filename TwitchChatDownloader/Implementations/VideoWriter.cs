@@ -18,8 +18,8 @@ namespace TwitchChatDownloader.Implementations
 
         public async Task Write(InternalVideo internalVideo)
         {
-            var comments = await _commentsRetriever.GetComments(internalVideo).ConfigureAwait(false);
-            await _srtWriter.Write(internalVideo, comments).ConfigureAwait(false);
+            var comments = await _commentsRetriever.GetComments(internalVideo);
+            await _srtWriter.Write(internalVideo, comments);
         }
     }
 }

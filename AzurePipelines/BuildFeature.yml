@@ -1,6 +1,3 @@
-variables:
-  releaseVersion: '1.1.0'
-
 name: Build Trigger On Feature
 trigger:
   branches:
