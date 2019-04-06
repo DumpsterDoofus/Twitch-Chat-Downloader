@@ -40,6 +40,6 @@ steps:
     repositoryName: 'DumpsterDoofus/Twitch-Chat-Downloader'
     action: 'create'
     target: '$(Build.SourceVersion)'
-    tagSource: 'Git tag'
+    tagSource: 'auto'
     tag: '$(releaseVersion)'
     assets: '$(Build.ArtifactStagingDirectory)\TwitchChatDownloader\*'
