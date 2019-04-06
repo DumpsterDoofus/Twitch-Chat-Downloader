@@ -25,15 +25,15 @@ namespace TwitchChatDownloader.Implementations
         {
             try
             {
-                var getUsersResponse = await _twitchApi.Helix.Users.GetUsersAsync(logins: new List<string>{username}).ConfigureAwait(false);
+                var getUsersResponse = await _twitchApi.Helix.Users.GetUsersAsync(logins: new List<string>{username});
                 var numUsers = getUsersResponse.Users.Length;
                 var userId = numUsers == 1
                     ? getUsersResponse.Users.First().Id
                     : throw new Exception($"Received ${numUsers} users during GET single user request for username {username}. Was expecting 1 user. This is probably a bug.");
-                var getVideosResponses = new List<GetVideosResponse>{await _twitchApi.Helix.Videos.GetVideoAsync(userId: userId, type: videoType).ConfigureAwait(false) };
+                var getVideosResponses = new List<GetVideosResponse>{await _twitchApi.Helix.Videos.GetVideoAsync(userId: userId, type: videoType) };
                 while (getVideosResponses.Last().Pagination.Cursor != null)
                 {
-                    getVideosResponses.Add(await _twitchApi.Helix.Videos.GetVideoAsync(userId: userId, type: videoType, after:getVideosResponses.Last().Pagination.Cursor).ConfigureAwait(false));
+                    getVideosResponses.Add(await _twitchApi.Helix.Videos.GetVideoAsync(userId: userId, type: videoType, after:getVideosResponses.Last().Pagination.Cursor));
                 }
                 return Result.Ok(getVideosResponses.SelectMany(response => response.Videos).Select(video => new InternalVideo(int.Parse(video.Id), video.Title)));
             }

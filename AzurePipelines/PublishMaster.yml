@@ -1,5 +1,5 @@
 variables:
-  releaseVersion: '1.1.1'
+  releaseVersion: '1.1.2'
 
 name: Build Trigger On Master
 trigger:
