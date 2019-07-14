@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
-using TwitchChatDownloader.Interfaces;
 using TwitchChatDownloader.Models;
+using TwitchChatDownloader.Readers.Videos;
+using TwitchChatDownloader.Writers.Video;
 
 namespace TwitchChatDownloader
 {

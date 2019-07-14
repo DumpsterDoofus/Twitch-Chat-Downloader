@@ -9,6 +9,11 @@ namespace TwitchChatDownloader.Validation
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
+            if (value == null)
+            {
+                return new ValidationResult("Encountered null object.", new []{validationContext.MemberName});
+            }
+
             var memberNames = new[] {validationContext.MemberName};
             var type = value.GetType();
             if (type != typeof(string))

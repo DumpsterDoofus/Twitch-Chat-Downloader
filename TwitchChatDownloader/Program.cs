@@ -4,11 +4,18 @@ using CommandLine;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using TwitchChatDownloader.Implementations;
 using TwitchChatDownloader.Models;
 using SimpleInjector;
+using TwitchChatDownloader.Config;
 using TwitchChatDownloader.Extensions;
 using TwitchChatDownloader.Interfaces;
+using TwitchChatDownloader.Logging;
+using TwitchChatDownloader.Readers.Comments;
+using TwitchChatDownloader.Readers.Videos;
+using TwitchChatDownloader.Writers.Srt;
+using TwitchChatDownloader.Writers.SrtFile;
+using TwitchChatDownloader.Writers.SrtLines;
+using TwitchChatDownloader.Writers.Video;
 using TwitchLib.Api;
 using TwitchLib.Api.Core;
 using ILogger = Serilog.ILogger;
@@ -17,6 +24,8 @@ namespace TwitchChatDownloader
 {
     internal static class Program
     {
+        private static ILogger _logger;
+
         private static async Task Main(string[] args)
         {
             try
@@ -30,15 +39,15 @@ namespace TwitchChatDownloader
                             (VideoOptions videoOptions) => twitchChatDownloader.Process(videoOptions),
                             errors =>
                             {
-                                Console.WriteLine($"\nCommand line parsing failed. Errors:\n{string.Join('\n', errors)}");
+                                _logger.Error($"Command line parsing failed. Errors:\n{string.Join('\n', errors)}");
                                 return Task.CompletedTask;
                             });
                 }
             }
             catch (Exception exception)
             {
-                Console.WriteLine($"\nSomething really bad happened. Application shutting down.\n{exception}");
-                Environment.Exit(-1);
+                _logger?.Error($"Something really bad happened. Application shutting down.\n{exception}");
+                throw;
             }
         }
 
@@ -47,14 +56,17 @@ namespace TwitchChatDownloader
             var configuration = new ConfigurationBuilder()
                     .AddJsonFile("appsettings.json")
                     .Build();
-            var logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(configuration)
+            var loggingConfig = configuration.GetValidatableOrThrow<LogConfig>();
+            _logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .WriteTo.RollingFile(loggingConfig.LogDirectoryPath)
                 .CreateLogger();
-            container.RegisterSingleton<ILogger>(() => logger);
-            container.RegisterInstance<ISrtSettings>(configuration.GetValidatableOrThrow<SrtSettings>());
-            container.RegisterInstance<ISrtFileSettings>(configuration.GetValidatableOrThrow<SrtFileSettings>());
-            container.RegisterInstance<ICommentsCacheSettings>(configuration.GetValidatableOrThrow<CommentsCacheSettings>());
-            container.RegisterInstance(CreateTwitchApi(configuration.GetValidatableOrThrow<TwitchSettings>(), logger));
+            container.RegisterSingleton(() => _logger);
+            container.RegisterSingleton(typeof(ILog<>), typeof(Log<>));
+            container.RegisterInstance<ISrtConfig>(configuration.GetValidatableOrThrow<SrtConfig>());
+            container.RegisterInstance<ISrtFileConfig>(configuration.GetValidatableOrThrow<SrtFileConfig>());
+            container.RegisterInstance<ICommentsCacheConfig>(configuration.GetValidatableOrThrow<CommentsCacheConfig>());
+            container.RegisterInstance(CreateTwitchApi(configuration.GetValidatableOrThrow<TwitchConfig>(), _logger));
             container.RegisterSingleton<IVideoRetriever, VideoRetriever>();
             container.RegisterDecorator<IVideoRetriever, LoggingVideoRetriever>(Lifestyle.Singleton);
             container.RegisterSingleton<IVideosRetriever, VideosRetriever>();
@@ -67,16 +79,16 @@ namespace TwitchChatDownloader
             container.RegisterSingleton<ISrtWriter, SrtWriter>();
             container.RegisterSingleton<ISrtFileWriter, SrtFileWriter>();
             container.RegisterDecorator<ISrtFileWriter, LoggingSrtFileWriter>(Lifestyle.Singleton);
-            container.RegisterSingleton<ISrtLineWriter, SrtLineWriter>();
+            container.RegisterSingleton<ICommentsParser, CommentsParser>();
             container.Verify();
             return container.GetInstance<TwitchChatDownloader>();
         }
 
-        private static TwitchAPI CreateTwitchApi(ITwitchSettings twitchSettings, ILogger logger)
+        private static TwitchAPI CreateTwitchApi(ITwitchConfig twitchConfig, ILogger logger)
         {
             var apiSettings = new ApiSettings
             {
-                ClientId = twitchSettings.ClientId
+                ClientId = twitchConfig.ClientId
             };
             var loggerFactory = new LoggerFactory()
                 .AddSerilog(logger);
