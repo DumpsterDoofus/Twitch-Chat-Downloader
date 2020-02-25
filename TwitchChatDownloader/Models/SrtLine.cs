@@ -2,7 +2,7 @@
 
 namespace TwitchChatDownloader.Models
 {
-    internal class SrtLine
+    public class SrtLine
     {
         public TimeSpan StartTime { get; }
         public TimeSpan EndTime { get; }
