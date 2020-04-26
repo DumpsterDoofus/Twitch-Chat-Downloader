@@ -18,7 +18,7 @@ namespace TwitchChatDownloader.Readers.Comments
             _log = log ?? throw new ArgumentNullException(nameof(log));
         }
 
-        public async Task<IEnumerable<Comment>> GetComments(InternalVideo video)
+        public async Task<IReadOnlyList<Comment>> GetComments(InternalVideo video)
         {
             _log.Info($"Getting comments for video {video.Name}, ID {video.Id}.");
             var comments = (await _commentsRetriever.GetComments(video)).ToList();
@@ -28,7 +28,7 @@ namespace TwitchChatDownloader.Readers.Comments
             }
             else
             {
-                _log.Info($"Got {comments.Count} comments for video.");                
+                _log.Info($"Got {comments.Count} comments for video.");
             }
             return comments;
         }

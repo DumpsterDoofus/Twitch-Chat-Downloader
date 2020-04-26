@@ -18,13 +18,13 @@ namespace TwitchChatDownloader.Readers.Comments
             _commentsRetriever = commentsRetriever ?? throw new ArgumentNullException(nameof(commentsRetriever));
         }
 
-        public async Task<IEnumerable<Comment>> GetComments(InternalVideo video)
+        public async Task<IReadOnlyList<Comment>> GetComments(InternalVideo video)
         {
             var cachePath = GetCachePath(video);
             if (File.Exists(cachePath))
             {
                 var text = await File.ReadAllTextAsync(cachePath);
-                return JsonConvert.DeserializeObject<IEnumerable<Comment>>(text);
+                return JsonConvert.DeserializeObject<IReadOnlyList<Comment>>(text);
             }
 
             var comments = await _commentsRetriever.GetComments(video);

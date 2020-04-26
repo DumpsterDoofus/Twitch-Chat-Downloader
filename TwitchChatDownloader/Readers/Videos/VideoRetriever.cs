@@ -31,7 +31,7 @@ namespace TwitchChatDownloader.Readers.Videos
             }
             catch (BadResourceException badResourceException)
             {
-                return Result.Fail<InternalVideo>($"Failed to get video info for video {videoId}. Exception from Twitch API: {badResourceException}");
+                return Result.Failure<InternalVideo>($"Failed to get video info for video {videoId}. Exception from Twitch API: {badResourceException}");
             }
         }
     }

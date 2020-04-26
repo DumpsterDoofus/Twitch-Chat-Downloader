@@ -18,7 +18,7 @@ namespace TwitchChatDownloader.Readers.Videos
         public VideosRetriever(TwitchAPI twitchApi) =>
             _twitchApi = twitchApi ?? throw new ArgumentNullException(nameof(twitchApi));
 
-        public async Task<Result<IEnumerable<InternalVideo>>> GetVideos(string username, VideoType videoType)
+        public async Task<Result<IReadOnlyList<InternalVideo>>> GetVideos(string username, VideoType videoType)
         {
             try
             {
@@ -32,11 +32,16 @@ namespace TwitchChatDownloader.Readers.Videos
                 {
                     getVideosResponses.Add(await _twitchApi.Helix.Videos.GetVideoAsync(userId: userId, type: videoType, after:getVideosResponses.Last().Pagination.Cursor));
                 }
-                return Result.Ok(getVideosResponses.SelectMany(response => response.Videos).Select(video => new InternalVideo(int.Parse(video.Id), video.Title)));
+
+                var internalVideos = getVideosResponses
+                    .SelectMany(response => response.Videos)
+                    .Select(video => new InternalVideo(int.Parse(video.Id), video.Title))
+                    .ToList();
+                return Result.Ok((IReadOnlyList<InternalVideo>)internalVideos);
             }
             catch (BadResourceException badResourceException)
             {
-                return Result.Fail<IEnumerable<InternalVideo>>($"Failed to get videos for username {username}. Exception from Twitch API: {badResourceException}");
+                return Result.Failure<IReadOnlyList<InternalVideo>>($"Failed to get videos for username {username}. Exception from Twitch API: {badResourceException}");
             }
         }
     }

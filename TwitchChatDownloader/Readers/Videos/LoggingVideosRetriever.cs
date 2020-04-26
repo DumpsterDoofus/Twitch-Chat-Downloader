@@ -20,11 +20,11 @@ namespace TwitchChatDownloader.Readers.Videos
             _log = log ?? throw new ArgumentNullException(nameof(log));
         }
 
-        public Task<Result<IEnumerable<InternalVideo>>> GetVideos(string username, VideoType videoType)
+        public Task<Result<IReadOnlyList<InternalVideo>>> GetVideos(string username, VideoType videoType)
         {
             _log.Info($"Getting info for all videos of type {videoType} from username {username}");
             return _videosRetriever.GetVideos(username, videoType)
-                .OnSuccess(internalVideos => _log.Info($"Got info for the following {internalVideos.Count()} videos:\n{string.Join('\n', internalVideos.Select(v => v.Name))}"))
+                .Tap(internalVideos => _log.Info($"Got info for the following {internalVideos.Count} videos:\n{string.Join('\n', internalVideos.Select(v => v.Name))}"))
                 .OnFailure(error => _log.Error($"Failed to get video info for user {username}."));
         }
     }

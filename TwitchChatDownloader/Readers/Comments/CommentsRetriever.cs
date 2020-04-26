@@ -14,17 +14,18 @@ namespace TwitchChatDownloader.Readers.Comments
         public CommentsRetriever(TwitchAPI twitchApi) =>
             _twitchApi = twitchApi ?? throw new ArgumentNullException(nameof(twitchApi));
 
-        public async Task<IEnumerable<Comment>> GetComments(InternalVideo video)
+        public async Task<IReadOnlyList<Comment>> GetComments(InternalVideo video)
         {
             var comments = await _twitchApi.Undocumented.GetAllCommentsAsync(video.Id.ToString());
             return comments
                 .SelectMany(page => page.Comments)
                 .Select(comment =>
                 new Comment(
-                    comment.Commenter.DisplayName ?? comment.Commenter.Name, 
+                    comment.Commenter.DisplayName ?? comment.Commenter.Name,
                     comment.Message.UserColor,
-                    comment.Message.Body, 
-                    TimeSpan.FromSeconds(comment.ContentOffsetSeconds)));
+                    comment.Message.Body,
+                    TimeSpan.FromSeconds(comment.ContentOffsetSeconds)))
+                .ToList();
         }
     }
 }

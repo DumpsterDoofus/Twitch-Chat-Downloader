@@ -6,6 +6,6 @@ namespace TwitchChatDownloader.Readers.Comments
 {
     internal interface ICommentsRetriever
     {
-        Task<IEnumerable<Comment>> GetComments(InternalVideo video);
+        Task<IReadOnlyList<Comment>> GetComments(InternalVideo video);
     }
 }

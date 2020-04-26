@@ -1,13 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2041
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29324.140
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwitchChatDownloader", "TwitchChatDownloader\TwitchChatDownloader.csproj", "{60E3952D-B2B8-4EF0-906C-598660E7E2EE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwitchChatDownloader.IntegrationTests", "TwitchChatDownloader.IntegrationTests\TwitchChatDownloader.IntegrationTests.csproj", "{53DC169B-252F-41AF-BA7C-5CBC8474729D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwitchChatDownloader.UnitTests", "TwitchChatDownloader.UnitTests\TwitchChatDownloader.UnitTests.csproj", "{AB76BFF1-3113-4C5A-9346-001FE7D6BC4B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2D60565C-7199-48C6-B99A-B6E68DFA9861}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

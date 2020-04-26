@@ -21,7 +21,7 @@ namespace TwitchChatDownloader.Readers.Videos
         {
             _log.Info($"Getting info for video ID: {videoId}");
             return _videoRetriever.GetVideo(videoId)
-                .OnSuccess(internalVideo => _log.Info($"Got info for video \"{internalVideo.Name}\""))
+                .Tap(internalVideo => _log.Info($"Got info for video \"{internalVideo.Name}\""))
                 .OnFailure(error => _log.Error($"Failed to get info for video ID {videoId}: {error}"));
         }
     }

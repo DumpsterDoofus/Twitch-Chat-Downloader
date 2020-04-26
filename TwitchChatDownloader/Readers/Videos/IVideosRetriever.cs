@@ -8,6 +8,6 @@ namespace TwitchChatDownloader.Readers.Videos
 {
     public interface IVideosRetriever
     {
-        Task<Result<IEnumerable<InternalVideo>>> GetVideos(string username, VideoType videoType);
+        Task<Result<IReadOnlyList<InternalVideo>>> GetVideos(string username, VideoType videoType);
     }
 }
