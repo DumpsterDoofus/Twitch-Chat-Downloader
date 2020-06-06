@@ -18,6 +18,7 @@ using TwitchChatDownloader.Writers.SrtLines;
 using TwitchChatDownloader.Writers.Video;
 using TwitchLib.Api;
 using TwitchLib.Api.Core;
+using TwitchLib.Api.Core.RateLimiter;
 using ILogger = Serilog.ILogger;
 
 namespace TwitchChatDownloader
@@ -64,7 +65,7 @@ namespace TwitchChatDownloader
             container.RegisterInstance<ISrtConfig>(configuration.GetValidatableOrThrow<SrtConfig>());
             container.RegisterInstance<ISrtFileConfig>(configuration.GetValidatableOrThrow<SrtFileConfig>());
             container.RegisterInstance<ICommentsCacheConfig>(configuration.GetValidatableOrThrow<CommentsCacheConfig>());
-            container.RegisterInstance(CreateTwitchApi(configuration.GetValidatableOrThrow<TwitchConfig>(), _logger));
+            container.RegisterInstance(CreateTwitchApi(configuration.GetValidatableOrThrow<TwitchConfig>()));
             container.RegisterSingleton<IVideoRetriever, VideoRetriever>();
             container.RegisterDecorator<IVideoRetriever, LoggingVideoRetriever>(Lifestyle.Singleton);
             container.RegisterSingleton<IVideosRetriever, VideosRetriever>();
@@ -82,15 +83,13 @@ namespace TwitchChatDownloader
             return container.GetInstance<TwitchChatDownloader>();
         }
 
-        private static TwitchAPI CreateTwitchApi(ITwitchConfig twitchConfig, ILogger logger)
+        private static TwitchAPI CreateTwitchApi(ITwitchConfig twitchConfig)
         {
             var apiSettings = new ApiSettings
             {
                 ClientId = twitchConfig.ClientId
             };
-            var loggerFactory = new LoggerFactory()
-                .AddSerilog(logger);
-            return new TwitchAPI(loggerFactory, settings: apiSettings);
+            return new TwitchAPI(settings: apiSettings);
         }
     }
 }
