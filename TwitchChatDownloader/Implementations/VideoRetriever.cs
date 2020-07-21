@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using TwitchChatDownloader.Interfaces;
 using TwitchChatDownloader.Models;
@@ -23,14 +20,8 @@ namespace TwitchChatDownloader.Implementations
         {
             try
             {
-                var videos = (await _twitchApi.Helix.Videos.GetVideoAsync(new List<string> {videoId.ToString()})).Videos;
-                var numVideos = videos.Length;
-                if (numVideos != 1)
-                {
-                    throw new Exception($"Received ${numVideos} videos during GET single video request. Was expecting 1 video. This is probably a bug.");
-                }
-                var video = videos.First();
-                return Result.Ok(new InternalVideo(int.Parse(video.Id), video.Title));
+                var video = await _twitchApi.V5.Videos.GetVideoAsync(videoId.ToString());
+                return Result.Ok(new InternalVideo(videoId, video.Title));
             }
             catch (BadResourceException e)
             {
